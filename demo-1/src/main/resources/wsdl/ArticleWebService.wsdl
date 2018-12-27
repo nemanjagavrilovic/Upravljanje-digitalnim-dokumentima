@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ArticleWebService" targetNamespace="http://webService.demo.example.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://webService.demo.example.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://webService.demo.example.com/" elementFormDefault="unqualified" targetNamespace="http://webService.demo.example.com/" version="1.0">
+<xs:element name="Article">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="text" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="articleFindAllRequest" type="tns:articleFindAllRequest"/>
+<xs:element name="articleFindAllResponse" type="tns:articleFindAllResponse"/>
+<xs:element name="articleFindByKeywordsRequest" type="tns:articleFindByKeywordsRequest"/>
+<xs:element name="articleFindByMagazineRequest" type="tns:articleFindByMagazineRequest"/>
+<xs:element name="articleFindByMagazineResponse" type="tns:articleFindByMagazineResponse"/>
+<xs:element name="articleFindByTitleRequest" type="tns:articleFindByTitleRequest"/>
+<xs:element name="articleFindByTitleResponse" type="tns:articleFindByTitleResponse"/>
+<xs:element name="articleKeywordsResponse" type="tns:articleKeywordsResponse"/>
+<xs:element name="articleMoreLikeThisRequest" type="tns:articleMoreLikeThisRequest"/>
+<xs:element name="articleMoreLikeThisResponse" type="tns:articleMoreLikeThisResponse"/>
+<xs:element name="articleSaveRequest" type="tns:articleSaveRequest"/>
+<xs:element name="articleSaveResponse" type="tns:articleSaveResponse"/>
+<xs:complexType name="articleFindAllRequest">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="articleFindAllResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleEL">
+<xs:sequence>
+<xs:element minOccurs="0" name="abstracts" type="xs:string"/>
+<xs:element minOccurs="0" name="article_id" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="authors" nillable="true" type="tns:User"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
+<xs:element minOccurs="0" name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" nillable="true" type="tns:User"/>
+<xs:element minOccurs="0" name="text" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="User">
+<xs:sequence>
+<xs:element name="id" type="xs:string"/>
+<xs:element name="firstName" type="xs:string"/>
+<xs:element name="lastName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByKeywordsRequest">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleKeywordsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByMagazineRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="magazineName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByMagazineResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleMoreLikeThisRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="text" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleMoreLikeThisResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:User"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByTitleRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByTitleResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleSaveRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="article">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="text" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleSaveResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="article" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="findByTitleResponse">
+    <wsdl:part name="parameters" element="tns:articleFindByTitleResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByMagazineNameResponse">
+    <wsdl:part name="parameters" element="tns:articleFindByMagazineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByKeywordsResponse">
+    <wsdl:part name="parameters" element="tns:articleKeywordsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="saveResponse">
+    <wsdl:part name="parameters" element="tns:articleSaveResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAll">
+    <wsdl:part name="parameters" element="tns:articleFindAllRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByKeywords">
+    <wsdl:part name="parameters" element="tns:articleFindByKeywordsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="moreLikeThisResponse">
+    <wsdl:part name="parameters" element="tns:articleMoreLikeThisResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByMagazineName">
+    <wsdl:part name="parameters" element="tns:articleFindByMagazineRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="moreLikeThis">
+    <wsdl:part name="parameters" element="tns:articleMoreLikeThisRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAllResponse">
+    <wsdl:part name="parameters" element="tns:articleFindAllResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByTitle">
+    <wsdl:part name="parameters" element="tns:articleFindByTitleRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="save">
+    <wsdl:part name="parameters" element="tns:articleSaveRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ArticleWebService">
+    <wsdl:operation name="findAll">
+      <wsdl:input name="findAll" message="tns:findAll">
+    </wsdl:input>
+      <wsdl:output name="findAllResponse" message="tns:findAllResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByKeywords">
+      <wsdl:input name="findByKeywords" message="tns:findByKeywords">
+    </wsdl:input>
+      <wsdl:output name="findByKeywordsResponse" message="tns:findByKeywordsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByMagazineName">
+      <wsdl:input name="findByMagazineName" message="tns:findByMagazineName">
+    </wsdl:input>
+      <wsdl:output name="findByMagazineNameResponse" message="tns:findByMagazineNameResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="moreLikeThis">
+      <wsdl:input name="moreLikeThis" message="tns:moreLikeThis">
+    </wsdl:input>
+      <wsdl:output name="moreLikeThisResponse" message="tns:moreLikeThisResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByTitle">
+      <wsdl:input name="findByTitle" message="tns:findByTitle">
+    </wsdl:input>
+      <wsdl:output name="findByTitleResponse" message="tns:findByTitleResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="save">
+      <wsdl:input name="save" message="tns:save">
+    </wsdl:input>
+      <wsdl:output name="saveResponse" message="tns:saveResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ArticleWebServiceServiceSoapBinding" type="tns:ArticleWebService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="findAll">
+      <soap:operation soapAction="http://webService.demo.example.com/findAll" style="document"/>
+      <wsdl:input name="findAll">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findAllResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByKeywords">
+      <soap:operation soapAction="http://webService.demo.example.com/findByKeywords" style="document"/>
+      <wsdl:input name="findByKeywords">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByKeywordsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByMagazineName">
+      <soap:operation soapAction="http://webService.demo.example.com/findByMagazineName" style="document"/>
+      <wsdl:input name="findByMagazineName">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByMagazineNameResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="moreLikeThis">
+      <soap:operation soapAction="http://webService.demo.example.com/moreLikeThis" style="document"/>
+      <wsdl:input name="moreLikeThis">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="moreLikeThisResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByTitle">
+      <soap:operation soapAction="http://webService.demo.example.com/findByTitle" style="document"/>
+      <wsdl:input name="findByTitle">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByTitleResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="save">
+      <soap:operation soapAction="http://webService.demo.example.com/save" style="document"/>
+      <wsdl:input name="save">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="saveResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ArticleWebService">
+    <wsdl:port name="ArticlePort" binding="tns:ArticleWebServiceServiceSoapBinding">
+      <soap:address location="http://localhost:9090/ArticlePort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
