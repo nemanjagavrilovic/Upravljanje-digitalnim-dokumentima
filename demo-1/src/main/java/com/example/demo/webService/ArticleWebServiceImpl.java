@@ -12,6 +12,7 @@ import javax.jws.WebService;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.convertor.ArticlesToArticleEL;
@@ -51,10 +52,21 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 
 
 	    public java.util.List<com.example.demo.model.ArticleEL> findByKeywords(java.util.List<java.lang.String> arg0) {  
-	        System.out.println(arg0);    
-	        try {
-	            java.util.List<com.example.demo.model.ArticleEL> _return = null;
-	            return _return;
+	        System.out.println(arg0); 
+	        List<ArticleEL> list = new ArrayList<>();
+	    	try {
+	    		for(String item : arg0){
+	    			org.elasticsearch.index.query.QueryBuilder retVal = QueryBuilders.termQuery("keywords", item);
+	                Iterable<ArticleEL> collection = articlesRepository.search(retVal);
+	                List<ArticleEL> found = new ArrayList<>();
+	    	    	collection.forEach(found::add);
+	    	    	for(ArticleEL article : found){
+	    	    		if(!contains(list,article.getArticle_id())){
+	    	    			list.add(article);
+	    	    		}
+	    	    	}
+				}
+	    		return list;
 	        } catch (Exception ex) {
 	            ex.printStackTrace();
 	            throw new RuntimeException(ex);
@@ -140,5 +152,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
         }
  
     }
-
+    public boolean contains(final List<ArticleEL> list, final String id){
+        return list.stream().filter(o -> o.getArticle_id().equals(id)).findFirst().isPresent();
+    }
 }
