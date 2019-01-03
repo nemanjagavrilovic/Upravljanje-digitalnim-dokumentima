@@ -9,13 +9,17 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.json.JSONArray;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.convertor.ArticlesToArticleEL;
+import com.example.demo.lucene.QueryModel;
 import com.example.demo.model.ArticleEL;
 import com.example.demo.model.User;
 import com.example.demo.repository.ArticlesRepository;
@@ -155,4 +159,51 @@ public class ArticleWebServiceImpl implements ArticleWebService {
     public boolean contains(final List<ArticleEL> list, final String id){
         return list.stream().filter(o -> o.getArticle_id().equals(id)).findFirst().isPresent();
     }
+	@Override
+	public List<ArticleEL> findByScientificField(String scientificField) {
+	    List<ArticleEL> list = new ArrayList<>();
+		try {
+            Iterable<ArticleEL> collection = articlesRepository.findByScientificField(scientificField);
+            collection.forEach(list::add);
+            return list;
+
+	    } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+	}
+	@Override
+	public List<ArticleEL> booleanQuery(List<QueryModel> queryFields,String operation) {
+		List<ArticleEL> list = new ArrayList<>();
+		try {
+			List<QueryBuilder> queries = new ArrayList<>();
+			for(QueryModel query : queryFields){
+				queries.add(QueryBuilders.matchQuery(query.getField(), query.getValue()));
+			}
+			
+			BoolQueryBuilder builder = QueryBuilders.boolQuery();
+			if(operation.equalsIgnoreCase("AND")){
+				for(QueryBuilder query : queries){
+					builder.must(query);
+				}
+			}else if(operation.equalsIgnoreCase("OR")){
+				for(QueryBuilder query : queries){
+					builder.should(query);
+				}
+			}
+		    Iterable<ArticleEL> collection = articlesRepository.search(builder);
+	        collection.forEach(list::add);
+            return list;
+ 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+	}
+	@Override
+	public List<ArticleEL> findByAuthor(String firstName, String lastName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

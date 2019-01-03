@@ -1,12 +1,5 @@
 package com.example.demo.repository;
 
-
-
-
-import java.util.List;
-
-import org.json.JSONArray;
-import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import com.example.demo.model.ArticleEL;
@@ -15,4 +8,7 @@ public interface ArticlesRepository  extends ElasticsearchRepository<ArticleEL,S
 
 	Iterable<ArticleEL> findByMagazineName(String name);
 	Iterable<ArticleEL> findByTitle(String title);
+	Iterable<ArticleEL> findByScientificField(String scientificField);
+	Iterable<ArticleEL> findByTitleAndMagazineName(String title, String magazineName);
+	
 }

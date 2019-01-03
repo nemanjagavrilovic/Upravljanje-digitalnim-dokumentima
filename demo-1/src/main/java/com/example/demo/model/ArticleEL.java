@@ -6,8 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.InnerField;
-import org.springframework.data.elasticsearch.annotations.MultiField;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +28,9 @@ public class ArticleEL {
 	private String abstracts;
 	
 	@Field(type = FieldType.Text)
+	private String scientificField;
+	
+	@Field(type = FieldType.Keyword)
 	private List<String> keywords;
 	
 	@Id

@@ -13,6 +13,7 @@ import javax.jws.soap.SOAPBinding.Use;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+import com.example.demo.lucene.QueryModel;
 import com.example.demo.model.Article;
 import com.example.demo.model.ArticleEL;
 import com.example.demo.model.User;
@@ -81,5 +82,35 @@ public interface ArticleWebService {
 	className="com.example.demo.response.articleKeywordsResponse")
 	public List<ArticleEL> findByKeywords(@WebParam (name="keywords") List<String> keywords);
 	
+	@WebResult(name="articles")
+	@RequestWrapper(localName="articleFindByScientificFieldRequest",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.request.articleFindByScientificFieldRequest")
+	@WebMethod(operationName="findByScientificField",action="http://webService.demo.example.com/findByScientificField")
+	@ResponseWrapper(localName="articleFindByScientificFieldResponse",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.response.articleFindByScientificFieldResponse")
+	public List<ArticleEL> findByScientificField(@WebParam (name="scientificField") String scientificField);
+	
+	@WebResult(name="articles")
+	@RequestWrapper(localName="articleBooleanQueryRequest",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.request.articleBooleanQueryRequest")
+	@WebMethod(operationName="booleanQuery",action="http://webService.demo.example.com/booleanQuery")
+	@ResponseWrapper(localName="articleBooleanQuerydResponse",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.response.articleBooleanQueryResponse")
+	public List<ArticleEL> booleanQuery(@WebParam (name="queries") List<QueryModel> queryFields,
+										@WebParam (name="operation") String operation);
+	@WebResult(name="articles")
+	@RequestWrapper(localName="articleFindByAuthorRequest",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.request.articleFindByAuthorRequest")
+	@WebMethod(operationName="findByAuthor",action="http://webService.demo.example.com/findByAuthor")
+	@ResponseWrapper(localName="articleFindByAuthorResponse",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.response.articleFindByAuthorResponse")
+	public List<ArticleEL> findByAuthor(@WebParam (name="firstName") String firstName,
+										@WebParam (name="lastName") String lastName);
 	
 }
