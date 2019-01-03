@@ -7,6 +7,7 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 
 import com.example.demo.convertor.ArticlesToArticleEL;
 import com.example.demo.repository.ArticlesRepository;
@@ -24,9 +25,12 @@ public class WebServiceConfig {
 	@Autowired
 	private ArticlesToArticleEL articlesConverter;
 	
+	@Autowired
+	private ElasticsearchTemplate elasticsearchTemplate;
+	
 	@Bean
 	public Endpoint articleService(){
-		EndpointImpl endpoint=new EndpointImpl(bus,new ArticleWebServiceImpl(articlesRepository,articlesConverter));
+		EndpointImpl endpoint=new EndpointImpl(bus,new ArticleWebServiceImpl(elasticsearchTemplate,articlesRepository,articlesConverter));
 		endpoint.publish("/ArticleWebService");
 		return endpoint;
 	}

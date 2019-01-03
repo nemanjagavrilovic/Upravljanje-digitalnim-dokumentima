@@ -56,6 +56,7 @@
 <xs:element minOccurs="0" name="abstracts" type="xs:string"/>
 <xs:element minOccurs="0" name="article_id" type="xs:string"/>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="authors" nillable="true" type="tns:User"/>
+<xs:element minOccurs="0" name="highlight" type="xs:anyType"/>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
 <xs:element minOccurs="0" name="magazineName" type="xs:string"/>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" nillable="true" type="tns:User"/>
