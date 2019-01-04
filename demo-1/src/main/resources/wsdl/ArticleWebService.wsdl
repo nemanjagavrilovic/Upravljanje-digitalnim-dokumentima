@@ -7,12 +7,13 @@
 <xs:sequence>
 <xs:element name="filename" type="xs:ID"/>
 <xs:element name="title" type="xs:string"/>
-<xs:element name="text" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
 <xs:element name="magazineName" type="xs:string"/>
 <xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
 <xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
 <xs:element name="abstracts" type="xs:string"/>
 <xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
 </xs:sequence>
 </xs:complexType>
 </xs:element>
@@ -20,8 +21,8 @@
 <xs:element name="articleBooleanQuerydResponse" type="tns:articleBooleanQuerydResponse"/>
 <xs:element name="articleFindAllRequest" type="tns:articleFindAllRequest"/>
 <xs:element name="articleFindAllResponse" type="tns:articleFindAllResponse"/>
-<xs:element name="articleFindByAuthorRequest" type="tns:articleFindByAuthorRequest"/>
-<xs:element name="articleFindByAuthorResponse" type="tns:articleFindByAuthorResponse"/>
+<xs:element name="articleFindByAbstractFieldRequest" type="tns:articleFindByAbstractFieldRequest"/>
+<xs:element name="articleFindByAbstractResponse" type="tns:articleFindByAbstractResponse"/>
 <xs:element name="articleFindByKeywordsRequest" type="tns:articleFindByKeywordsRequest"/>
 <xs:element name="articleFindByMagazineRequest" type="tns:articleFindByMagazineRequest"/>
 <xs:element name="articleFindByMagazineResponse" type="tns:articleFindByMagazineResponse"/>
@@ -38,6 +39,7 @@
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="queries" type="tns:queryModel"/>
 <xs:element minOccurs="0" name="operation" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="queryModel">
@@ -55,22 +57,35 @@
 <xs:sequence>
 <xs:element minOccurs="0" name="abstracts" type="xs:string"/>
 <xs:element minOccurs="0" name="article_id" type="xs:string"/>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="authors" nillable="true" type="tns:customer"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="authors" nillable="true" type="tns:reviewer"/>
 <xs:element minOccurs="0" name="highlight" type="xs:anyType"/>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
 <xs:element minOccurs="0" name="magazineName" type="xs:string"/>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" nillable="true" type="tns:customer"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" nillable="true" type="tns:reviewer"/>
 <xs:element minOccurs="0" name="scientificField" type="xs:string"/>
 <xs:element minOccurs="0" name="text" type="xs:string"/>
 <xs:element minOccurs="0" name="title" type="xs:string"/>
 </xs:sequence>
 </xs:complexType>
-<xs:complexType name="customer">
+<xs:complexType name="reviewer">
 <xs:sequence>
 <xs:element name="age" type="xs:int"/>
-<xs:element minOccurs="0" name="firstname" type="xs:string"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
 <xs:element minOccurs="0" name="id" type="xs:string"/>
-<xs:element minOccurs="0" name="lastname" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByAbstractFieldRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="abstract" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByAbstractResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindAllRequest">
@@ -94,6 +109,7 @@
 <xs:complexType name="articleFindByMagazineRequest">
 <xs:sequence>
 <xs:element minOccurs="0" name="magazineName" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByMagazineResponse">
@@ -104,6 +120,7 @@
 <xs:complexType name="articleFindByScientificFieldRequest">
 <xs:sequence>
 <xs:element minOccurs="0" name="scientificField" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByScientificFieldResponse">
@@ -126,22 +143,14 @@
 <xs:element name="id" type="xs:string"/>
 <xs:element name="firstName" type="xs:string"/>
 <xs:element name="lastName" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByAuthorRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="firstName" type="xs:string"/>
-<xs:element minOccurs="0" name="lastName" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByAuthorResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+<xs:element name="email" type="xs:string"/>
+<xs:element name="age" type="xs:int"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByTitleRequest">
 <xs:sequence>
 <xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByTitleResponse">
@@ -156,12 +165,13 @@
 <xs:sequence>
 <xs:element name="filename" type="xs:ID"/>
 <xs:element name="title" type="xs:string"/>
-<xs:element name="text" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
 <xs:element name="magazineName" type="xs:string"/>
 <xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
 <xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
 <xs:element name="abstracts" type="xs:string"/>
 <xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
 </xs:sequence>
 </xs:complexType>
 </xs:element>
@@ -172,8 +182,20 @@
 <xs:element minOccurs="0" name="article" type="tns:articleEL"/>
 </xs:sequence>
 </xs:complexType>
+<xs:simpleType name="searchType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="regular"/>
+<xs:enumeration value="phrase"/>
+<xs:enumeration value="geo"/>
+<xs:enumeration value="bool"/>
+</xs:restriction>
+</xs:simpleType>
 </xs:schema>
   </wsdl:types>
+  <wsdl:message name="findByAbstract">
+    <wsdl:part name="parameters" element="tns:articleFindByAbstractFieldRequest">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="findAll">
     <wsdl:part name="parameters" element="tns:articleFindAllRequest">
     </wsdl:part>
@@ -190,16 +212,8 @@
     <wsdl:part name="parameters" element="tns:articleFindByMagazineRequest">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="findByAuthor">
-    <wsdl:part name="parameters" element="tns:articleFindByAuthorRequest">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="findByTitle">
     <wsdl:part name="parameters" element="tns:articleFindByTitleRequest">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="findByAuthorResponse">
-    <wsdl:part name="parameters" element="tns:articleFindByAuthorResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="save">
@@ -246,11 +260,21 @@
     <wsdl:part name="parameters" element="tns:articleFindAllResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="findByAbstractResponse">
+    <wsdl:part name="parameters" element="tns:articleFindByAbstractResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:portType name="ArticleWebService">
     <wsdl:operation name="booleanQuery">
       <wsdl:input name="booleanQuery" message="tns:booleanQuery">
     </wsdl:input>
       <wsdl:output name="booleanQueryResponse" message="tns:booleanQueryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByAbstract">
+      <wsdl:input name="findByAbstract" message="tns:findByAbstract">
+    </wsdl:input>
+      <wsdl:output name="findByAbstractResponse" message="tns:findByAbstractResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="findAll">
@@ -283,12 +307,6 @@
       <wsdl:output name="moreLikeThisResponse" message="tns:moreLikeThisResponse">
     </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="findByAuthor">
-      <wsdl:input name="findByAuthor" message="tns:findByAuthor">
-    </wsdl:input>
-      <wsdl:output name="findByAuthorResponse" message="tns:findByAuthorResponse">
-    </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="findByTitle">
       <wsdl:input name="findByTitle" message="tns:findByTitle">
     </wsdl:input>
@@ -310,6 +328,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="booleanQueryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByAbstract">
+      <soap:operation soapAction="http://webService.demo.example.com/findByAbstract" style="document"/>
+      <wsdl:input name="findByAbstract">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByAbstractResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -355,15 +382,6 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="moreLikeThisResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="findByAuthor">
-      <soap:operation soapAction="http://webService.demo.example.com/findByAuthor" style="document"/>
-      <wsdl:input name="findByAuthor">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="findByAuthorResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

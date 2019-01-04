@@ -80,9 +80,13 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 		}
 	}
 
-	public java.util.List<com.example.demo.model.ArticleEL> findByMagazineName(java.lang.String name) {
+	public java.util.List<com.example.demo.model.ArticleEL> findByMagazineName(java.lang.String name,SearchType type) {
 		try {
-			return searchQueryService.search(SearchType.regular, "magazineName", name);
+			List<ArticleEL> articles = searchQueryService.search(type, "magazineName", name);
+			if(articles != null)
+				return articles;
+			else
+				return null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
@@ -119,15 +123,20 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 		}
 	}
 
-	public java.util.List<com.example.demo.model.ArticleEL> findByTitle(java.lang.String title) {
+	public java.util.List<com.example.demo.model.ArticleEL> findByTitle(java.lang.String title,SearchType type) {
 		try {
-			return searchQueryService.search(SearchType.regular, "title", title);
+			List<ArticleEL> articles = searchQueryService.search(type, "title", title);
+			if (articles != null)
+				return articles;
+			else
+				return null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
 
+	@Override
 	public ArticleEL save(com.example.demo.model.Article arg0) {
 		try {
 			ArticleEL ar = articleToArticleEl.convert(arg0);
@@ -142,10 +151,13 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 		return list.stream().filter(o -> o.getArticle_id().equals(id)).findFirst().isPresent();
 	}
 
-	@Override
-	public List<ArticleEL> findByScientificField(String scientificField) {
+	public List<ArticleEL> findByScientificField(String scientificField,SearchType type) {
 		try {
-			return searchQueryService.search(SearchType.regular, "scientificField", scientificField);
+			List<ArticleEL> articles = searchQueryService.search(type, "scientificField", scientificField);
+			if(articles != null)
+				return articles;
+			else
+				return null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
@@ -153,12 +165,12 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	}
 
 	@Override
-	public List<ArticleEL> booleanQuery(List<QueryModel> queryFields, String operation) {
+	public List<ArticleEL> booleanQuery(List<QueryModel> queryFields, String operation,SearchType searchType) {
 		List<ArticleEL> list = new ArrayList<>();
 		try {
 			List<org.elasticsearch.index.query.QueryBuilder> queries = new ArrayList<>();
 			for (QueryModel query : queryFields) {
-				queries.add(QueryBuilder.buildQuery(SearchType.regular, query.getField(), query.getValue()));
+				queries.add(QueryBuilder.buildQuery(searchType, query.getField(), query.getValue()));
 			}
 			BoolQueryBuilder builder = QueryBuilders.boolQuery();
 			if (operation.equalsIgnoreCase("AND")) {
@@ -179,11 +191,19 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 			throw new RuntimeException(ex);
 		}
 	}
-
-	@Override
-	public List<ArticleEL> findByAuthor(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	public java.util.List<com.example.demo.model.ArticleEL> findByAbstract(java.lang.String abstracts,com.example.demo.lucene.SearchType type) {  
+	        try {
+	    		List<ArticleEL> articles = searchQueryService.search(type, "abstracts", abstracts);
+				if(articles != null)
+					return articles;
+				else
+					return null;
+		
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	            throw new RuntimeException(ex);
+	        }
+	 
+	    }
 }

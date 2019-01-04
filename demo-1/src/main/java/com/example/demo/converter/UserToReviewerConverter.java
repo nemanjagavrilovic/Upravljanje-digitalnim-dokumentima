@@ -26,7 +26,7 @@ public class UserToReviewerConverter implements Converter<User,Reviewer> {
 		List<Reviewer> reviewers = new ArrayList<>();
 		if(users != null) {
 			for(User user : users){
-				reviewers.add(new Reviewer(user.getId(),user.getFirstName(),user.getLastName()));
+				reviewers.add(new Reviewer(user.getId(),user.getFirstName(),user.getLastName(),user.getAge(),user.getEmail()));
 			}
 		}
 		return reviewers;

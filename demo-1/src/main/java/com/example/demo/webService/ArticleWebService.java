@@ -14,6 +14,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
 import com.example.demo.lucene.QueryModel;
+import com.example.demo.lucene.SearchType;
 import com.example.demo.model.Article;
 import com.example.demo.model.ArticleEL;
 import com.example.demo.model.User;
@@ -60,7 +61,8 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByMagazineResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByMagazineResponse")
-	public List<ArticleEL> findByMagazineName(@WebParam (name="magazineName") String magazineName);
+	public List<ArticleEL> findByMagazineName(@WebParam (name="magazineName") String magazineName,
+											  @WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleFindByTitleRequest",
@@ -70,7 +72,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByTitleResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByTitleResponse")
-	public List<ArticleEL> findByTitle(@WebParam (name="title") String title);
+	public List<ArticleEL> findByTitle(@WebParam (name="title") String title,@WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleFindByKeywordsRequest",
@@ -90,7 +92,8 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByScientificFieldResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByScientificFieldResponse")
-	public List<ArticleEL> findByScientificField(@WebParam (name="scientificField") String scientificField);
+	public List<ArticleEL> findByScientificField(@WebParam (name="scientificField") String scientificField,
+												 @WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleBooleanQueryRequest",
@@ -101,16 +104,18 @@ public interface ArticleWebService {
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleBooleanQueryResponse")
 	public List<ArticleEL> booleanQuery(@WebParam (name="queries") List<QueryModel> queryFields,
-										@WebParam (name="operation") String operation);
+										@WebParam (name="operation") String operation,
+										@WebParam (name="searchType") SearchType searchType);
+	
 	@WebResult(name="articles")
-	@RequestWrapper(localName="articleFindByAuthorRequest",
+	@RequestWrapper(localName="articleFindByAbstractFieldRequest",
 	targetNamespace="http://webService.demo.example.com/",
-	className="com.example.demo.request.articleFindByAuthorRequest")
-	@WebMethod(operationName="findByAuthor",action="http://webService.demo.example.com/findByAuthor")
-	@ResponseWrapper(localName="articleFindByAuthorResponse",
+	className="com.example.demo.request.articleFindByAbstractFieldRequest")
+	@WebMethod(operationName="findByAbstract",action="http://webService.demo.example.com/findByAbstract")
+	@ResponseWrapper(localName="articleFindByAbstractResponse",
 	targetNamespace="http://webService.demo.example.com/",
-	className="com.example.demo.response.articleFindByAuthorResponse")
-	public List<ArticleEL> findByAuthor(@WebParam (name="firstName") String firstName,
-										@WebParam (name="lastName") String lastName);
+	className="com.example.demo.response.articleFindByAbstractResponse")
+	public List<ArticleEL> findByAbstract(@WebParam (name="abstract") String abstracts,
+												 @WebParam (name="searchType") SearchType searchType);
 	
 }

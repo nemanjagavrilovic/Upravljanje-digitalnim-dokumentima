@@ -66,7 +66,10 @@ public class SearchQueryService {
             }
 
         });
-    	 return pages.getContent();
+    	 if(pages != null && pages.getContent() != null)
+    		 return pages.getContent();
+    	 else 
+    		 return null;
 		}catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
@@ -79,6 +82,7 @@ public class SearchQueryService {
 			
 			List<Map<String,Object>> list = (ArrayList<Map<String,Object>>) object;
 			for(Map<String,Object> map : list){
+				System.out.println(map);
 				if(map.get("id") != null && map.get("firstName") != null && map.get("lastName") != null && map.get("age") != null && map.get("email") != null)
 					users.add(new Reviewer(map.get("id").toString(),map.get("firstName").toString(),map.get("lastName").toString(),Integer.parseInt(map.get("age").toString()), map.get("email").toString()));
 				else 
