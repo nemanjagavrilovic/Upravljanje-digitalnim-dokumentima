@@ -9,6 +9,6 @@ import com.example.demo.model.Reviewer;
 
 public interface ReviewersRepository extends ElasticsearchRepository<Reviewer,String> {
 
-	List<Reviewer> findByFirstname(String firstName);
+	List<Reviewer> findByFirstName(String firstName);
 
 }

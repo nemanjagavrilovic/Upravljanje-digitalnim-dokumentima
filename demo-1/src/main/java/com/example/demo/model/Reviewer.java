@@ -9,25 +9,38 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Document(indexName="reviewers",type="reviewers",shards=2)
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Reviewer {
 
 	@Id
 	private String id;
 	@Field(type = FieldType.Text)
-	private String firstname;
+	private String firstName;
 
 	@Field(type = FieldType.Text)
-	private String lastname;
+	private String lastName;
+
+	@Field(type = FieldType.Text)
+	private String email;
 
 	@Field(type = FieldType.Integer)
 	private int age;
 	
+	
+	public Reviewer() {
+		super();
+	}
+	public Reviewer(String id, String firstName, String lastName,  int age,String email) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.age = age;
+	}
 	@GeoPointField
-	private GeoPoint location;
+	private String location;
 }

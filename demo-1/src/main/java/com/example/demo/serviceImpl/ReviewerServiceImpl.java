@@ -31,7 +31,7 @@ public class ReviewerServiceImpl implements ReviewerService{
 	@Override
 	public List<Reviewer> findByFirstName(String name) {
 		// TODO Auto-generated method stub
-		return reviewerRepository.findByFirstname(name);
+		return reviewerRepository.findByFirstName(name);
 	}
 
 	@Override

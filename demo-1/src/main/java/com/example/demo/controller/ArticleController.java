@@ -22,7 +22,7 @@ import com.example.demo.service.ArticleService;
 @RestController
 @RequestMapping(value="/articles")
 public class ArticleController {
-
+/*
 	@Autowired
 	private ArticleService articleService;
 	
@@ -63,4 +63,5 @@ public class ArticleController {
 	public void delete(){
 		 articleService.delete("1");
 	}
+	*/
 }

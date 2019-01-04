@@ -39,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "User", propOrder = {
     "id",
     "firstName",
-    "lastName"
+    "lastName",
+    "email",
+    "age"
 })
 public class User {
 
@@ -49,8 +51,21 @@ public class User {
     protected String firstName;
     @XmlElement(required = true)
     protected String lastName;
+    @XmlElement(required = true)
+    protected String email;
+    @XmlElement(required = true)
+    protected int age;
+    public User(){
+    	
+    }
+    public User(String id, String firstName, String lastName) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
-    /**
+	/**
      * Gets the value of the id property.
      * 
      * @return
@@ -121,5 +136,17 @@ public class User {
     public void setLastName(String value) {
         this.lastName = value;
     }
-
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+    
 }
