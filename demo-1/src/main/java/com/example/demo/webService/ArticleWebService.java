@@ -100,7 +100,7 @@ public interface ArticleWebService {
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.request.articleBooleanQueryRequest")
 	@WebMethod(operationName="booleanQuery",action="http://webService.demo.example.com/booleanQuery")
-	@ResponseWrapper(localName="articleBooleanQuerydResponse",
+	@ResponseWrapper(localName="articleBooleanQueryResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleBooleanQueryResponse")
 	public List<ArticleEL> booleanQuery(@WebParam (name="queries") List<QueryModel> queryFields,
@@ -116,6 +116,18 @@ public interface ArticleWebService {
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByAbstractResponse")
 	public List<ArticleEL> findByAbstract(@WebParam (name="abstract") String abstracts,
-												 @WebParam (name="searchType") SearchType searchType);
+		   								  @WebParam (name="searchType") SearchType searchType);
+	
+	@WebResult(name="articles")
+	@RequestWrapper(localName="articleFindByAuthorsNameAndSurnameRequest",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.request.articleFindByAuthorsNameAndSurnameRequest")
+	@WebMethod(operationName="findByNameAndSurname",action="http://webService.demo.example.com/findByNameAndSurname")
+	@ResponseWrapper(localName="articleFindByAuthorsNameAndSurnameResponse",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.response.articleFindByAuthorsNameAndSurnameResponse")
+	public List<ArticleEL> findByNameAndSurname(@WebParam (name="name") String name,
+										  @WebParam (name="surname") String surname,
+		   								  @WebParam (name="searchType") SearchType searchType);
 	
 }

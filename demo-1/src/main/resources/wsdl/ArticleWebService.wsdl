@@ -23,6 +23,8 @@
 <xs:element name="articleFindAllResponse" type="tns:articleFindAllResponse"/>
 <xs:element name="articleFindByAbstractFieldRequest" type="tns:articleFindByAbstractFieldRequest"/>
 <xs:element name="articleFindByAbstractResponse" type="tns:articleFindByAbstractResponse"/>
+<xs:element name="articleFindByAuthorsNameAndSurnameRequest" type="tns:articleFindByAuthorsNameAndSurnameRequest"/>
+<xs:element name="articleFindByAuthorsNameAndSurnameResponse" type="tns:articleFindByAuthorsNameAndSurnameResponse"/>
 <xs:element name="articleFindByKeywordsRequest" type="tns:articleFindByKeywordsRequest"/>
 <xs:element name="articleFindByMagazineRequest" type="tns:articleFindByMagazineRequest"/>
 <xs:element name="articleFindByMagazineResponse" type="tns:articleFindByMagazineResponse"/>
@@ -158,6 +160,18 @@
 <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
 </xs:sequence>
 </xs:complexType>
+<xs:complexType name="articleFindByAuthorsNameAndSurnameRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="surname" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByAuthorsNameAndSurnameResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
 <xs:complexType name="articleSaveRequest">
 <xs:sequence>
 <xs:element minOccurs="0" name="article">
@@ -192,6 +206,10 @@
 </xs:simpleType>
 </xs:schema>
   </wsdl:types>
+  <wsdl:message name="findByNameAndSurnameResponse">
+    <wsdl:part name="parameters" element="tns:articleFindByAuthorsNameAndSurnameResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="findByAbstract">
     <wsdl:part name="parameters" element="tns:articleFindByAbstractFieldRequest">
     </wsdl:part>
@@ -214,6 +232,10 @@
   </wsdl:message>
   <wsdl:message name="findByTitle">
     <wsdl:part name="parameters" element="tns:articleFindByTitleRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByNameAndSurname">
+    <wsdl:part name="parameters" element="tns:articleFindByAuthorsNameAndSurnameRequest">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="save">
@@ -313,6 +335,12 @@
       <wsdl:output name="findByTitleResponse" message="tns:findByTitleResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="findByNameAndSurname">
+      <wsdl:input name="findByNameAndSurname" message="tns:findByNameAndSurname">
+    </wsdl:input>
+      <wsdl:output name="findByNameAndSurnameResponse" message="tns:findByNameAndSurnameResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="save">
       <wsdl:input name="save" message="tns:save">
     </wsdl:input>
@@ -391,6 +419,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="findByTitleResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByNameAndSurname">
+      <soap:operation soapAction="http://webService.demo.example.com/findByNameAndSurname" style="document"/>
+      <wsdl:input name="findByNameAndSurname">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByNameAndSurnameResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

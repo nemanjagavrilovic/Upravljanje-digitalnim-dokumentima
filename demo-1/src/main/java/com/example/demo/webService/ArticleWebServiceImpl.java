@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
@@ -140,7 +141,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	public ArticleEL save(com.example.demo.model.Article arg0) {
 		try {
 			ArticleEL ar = articleToArticleEl.convert(arg0);
-			return articlesRepository.save(ar);
+			return articlesRepository.index(ar);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
@@ -200,6 +201,28 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 				else
 					return null;
 		
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	            throw new RuntimeException(ex);
+	        }
+	 
+	    }
+	public java.util.List<com.example.demo.model.ArticleEL> findByNameAndSurname(java.lang.String name,java.lang.String surname,com.example.demo.lucene.SearchType arg2) {  
+		List<ArticleEL> list = new ArrayList<>();
+		  
+		try { 
+	        	BoolQueryBuilder builder = QueryBuilders.boolQuery();
+	        	org.elasticsearch.index.query.QueryBuilder queryName = QueryBuilder.buildQuery(arg2, "authors.firstName", name);
+	        	org.elasticsearch.index.query.QueryBuilder querySurname = QueryBuilder.buildQuery(arg2, "authors.lastName", surname);
+	        	
+	        	builder.must(queryName);
+	        	builder.must(querySurname);
+	        	
+	        	org.elasticsearch.index.query.QueryBuilder nested = QueryBuilders.nestedQuery("authors", builder, ScoreMode.Avg);
+	        	
+	        	Iterable<ArticleEL> collection = articlesRepository.search(nested);
+				collection.forEach(list::add);
+				return list;
 	        } catch (Exception ex) {
 	            ex.printStackTrace();
 	            throw new RuntimeException(ex);
