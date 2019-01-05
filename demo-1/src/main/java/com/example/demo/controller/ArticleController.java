@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Article;
 import com.example.demo.model.ArticleEL;
 import com.example.demo.model.User;
-import com.example.demo.service.ArticleService;
 
 @RestController
 @RequestMapping(value="/articles")

@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlType;
     "firstName",
     "lastName",
     "email",
-    "age"
+    "age",
+    "lat",
+    "lon"
 })
 public class User {
 
@@ -55,6 +57,11 @@ public class User {
     protected String email;
     @XmlElement(required = true)
     protected int age;
+    @XmlElement(required = true)
+    protected double lat;
+    @XmlElement(required = true)
+    protected double lon;
+    
     public User(){
     	
     }
@@ -147,6 +154,18 @@ public class User {
 	}
 	public void setAge(int age) {
 		this.age = age;
+	}
+	public double getLat() {
+		return lat;
+	}
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+	public double getLon() {
+		return lon;
+	}
+	public void setLon(double lon) {
+		this.lon = lon;
 	}
     
 }

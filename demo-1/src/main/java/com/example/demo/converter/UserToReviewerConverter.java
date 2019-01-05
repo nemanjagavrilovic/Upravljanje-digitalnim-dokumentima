@@ -19,6 +19,9 @@ public class UserToReviewerConverter implements Converter<User,Reviewer> {
 		reviewer.setFirstName(arg0.getFirstName());
 		reviewer.setLastName(arg0.getLastName());
 		reviewer.setId(arg0.getId());
+		reviewer.setLat(arg0.getLat());
+		reviewer.setLon(arg0.getLon());
+		reviewer.setEmail(arg0.getEmail());
 		return reviewer;
 	}
 
@@ -26,7 +29,7 @@ public class UserToReviewerConverter implements Converter<User,Reviewer> {
 		List<Reviewer> reviewers = new ArrayList<>();
 		if(users != null) {
 			for(User user : users){
-				reviewers.add(new Reviewer(user.getId(),user.getFirstName(),user.getLastName(),user.getAge(),user.getEmail()));
+				reviewers.add(convert(user));
 			}
 		}
 		return reviewers;

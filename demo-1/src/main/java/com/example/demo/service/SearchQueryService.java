@@ -84,9 +84,10 @@ public class SearchQueryService {
 			for(Map<String,Object> map : list){
 				System.out.println(map);
 				if(map.get("id") != null && map.get("firstName") != null && map.get("lastName") != null && map.get("age") != null && map.get("email") != null)
-					users.add(new Reviewer(map.get("id").toString(),map.get("firstName").toString(),map.get("lastName").toString(),Integer.parseInt(map.get("age").toString()), map.get("email").toString()));
+					users.add(new Reviewer(map.get("id").toString(),map.get("firstName").toString(),map.get("lastName").toString(), map.get("email").toString(),
+							Integer.parseInt(map.get("age").toString()),Double.parseDouble(map.get("lat").toString()),Double.parseDouble(map.get("lon").toString())));
 				else 
-					users.add(new Reviewer(map.get("id").toString(),"","",0,""));
+					users.add(new Reviewer(map.get("id").toString(),"","","",0,0,0));
 				
 			}
 		}

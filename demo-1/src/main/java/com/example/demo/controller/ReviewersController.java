@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Reviewer;
-import com.example.demo.service.ReviewerService;
 
 @RestController
 @RequestMapping(value = "/reviewers")

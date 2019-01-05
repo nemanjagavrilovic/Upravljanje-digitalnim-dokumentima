@@ -10,11 +10,14 @@ import java.util.List;
 import javax.jws.WebService;
 
 import org.apache.lucene.search.join.ScoreMode;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import com.example.demo.converter.ArticlesToArticleEL;
 import com.example.demo.converter.ReviewerToUserConverter;
@@ -24,6 +27,7 @@ import com.example.demo.lucene.SearchType;
 import com.example.demo.model.ArticleEL;
 import com.example.demo.model.Reviewer;
 import com.example.demo.repository.ArticlesRepository;
+import com.example.demo.repository.ReviewersRepository;
 import com.example.demo.service.SearchQueryService;
 
 /**
@@ -38,14 +42,17 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	private ReviewerToUserConverter reviewerToUserConverter;
 	private ArticlesRepository articlesRepository;
 	private SearchQueryService searchQueryService;
+	private ReviewersRepository reviewerRepository;
 
 	@Autowired
 	public ArticleWebServiceImpl(SearchQueryService searchQueryService, ArticlesRepository articlesRepository,
-			ArticlesToArticleEL articleToArticleEl,ReviewerToUserConverter reviewerToUserConverter) {
+			ArticlesToArticleEL articleToArticleEl,ReviewerToUserConverter reviewerToUserConverter,
+			ReviewersRepository reviewerRepository) {
 		this.articlesRepository = articlesRepository;
 		this.articleToArticleEl = articleToArticleEl;
 		this.searchQueryService = searchQueryService;
 		this.reviewerToUserConverter = reviewerToUserConverter;
+		this.reviewerRepository = reviewerRepository;
 	}
 
 	public java.util.List<com.example.demo.model.ArticleEL> findAll() {
@@ -240,5 +247,54 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
+	}
+	public java.util.List<com.example.demo.model.Reviewer> findByDistance(com.example.demo.model.ArticleEL arg0) {  
+	    try {
+	    	List<Reviewer> reviewers = new ArrayList<>();
+			Iterable<ArticleEL> allArticles = articlesRepository.findAll();
+			List<Reviewer> allReviewers = new ArrayList<>();
+			for(ArticleEL ar : allArticles) {
+				allReviewers.addAll(ar.getReviewers());
+			}
+			List<GeoPoint> points = new ArrayList<>();
+			for(Reviewer reviewer : arg0.getAuthors()) {
+				points.add(new GeoPoint(reviewer.getLat(),reviewer.getLon()));
+			}
+			for(Reviewer r : allReviewers) {
+				boolean isInArea = false;
+				for (GeoPoint point : points) {
+					GeoDistanceQueryBuilder query = QueryBuilders.geoDistanceQuery("location")
+							.point(point.getLat(), point.getLon()).distance(100, DistanceUnit.KILOMETERS);
+					Iterable<Reviewer> searchedReviewers = reviewerRepository.search(query);
+					if(checkReviewersDistance(searchedReviewers, r)) {
+						isInArea=true;
+						break;
+					}
+				}
+				if(isInArea == false)
+					reviewers.add(r);
+				}
+				return reviewers;
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	            throw new RuntimeException(ex);
+	        }
+	 
+	    }
+	public boolean checkReviewersDistance(Iterable<Reviewer> searchedReviewers, Reviewer reviewer) {
+		boolean isInArea = false;
+		for (Reviewer item : searchedReviewers) {
+			if (compareReviewers(item,reviewer)) {
+				isInArea = true;
+				break;
+			}
+		}
+		return isInArea;
+	}
+	public boolean compareReviewers(Reviewer reviewer1, Reviewer reviewer2) {
+		if (reviewer1.getId().equals(reviewer2.getId())) {
+			return true;
+		}
+		return false;
 	}
 }

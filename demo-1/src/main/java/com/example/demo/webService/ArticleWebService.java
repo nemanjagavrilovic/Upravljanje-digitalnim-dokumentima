@@ -12,11 +12,11 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
-
 import com.example.demo.lucene.QueryModel;
 import com.example.demo.lucene.SearchType;
 import com.example.demo.model.Article;
 import com.example.demo.model.ArticleEL;
+import com.example.demo.model.Reviewer;
 import com.example.demo.model.User;
 
 @WebService(targetNamespace = "http://webService.demo.example.com/", name = "ArticleWebService")
@@ -139,5 +139,14 @@ public interface ArticleWebService {
 	className="com.example.demo.response.articleFindByTextResponse")
 	public List<ArticleEL> findByText(@WebParam (name="text") String text,
 		   								  @WebParam (name="searchType") SearchType searchType);
+	@WebResult(name="reviewers")
+	@RequestWrapper(localName="articleFindByDistanceRequest",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.request.articleFindByDistanceRequest")
+	@WebMethod(operationName="findByDistance",action="http://webService.demo.example.com/findByDistance")
+	@ResponseWrapper(localName="articleFindByDistanceResponse",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.response.articleFindByDistanceResponse")
+	public List<Reviewer> findByDistance(@WebParam (name="article") ArticleEL article);
 	
 }

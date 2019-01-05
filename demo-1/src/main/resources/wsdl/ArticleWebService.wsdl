@@ -26,6 +26,8 @@
 <xs:element name="articleFindByAbstractResponse" type="tns:articleFindByAbstractResponse"/>
 <xs:element name="articleFindByAuthorsNameAndSurnameRequest" type="tns:articleFindByAuthorsNameAndSurnameRequest"/>
 <xs:element name="articleFindByAuthorsNameAndSurnameResponse" type="tns:articleFindByAuthorsNameAndSurnameResponse"/>
+<xs:element name="articleFindByDistanceRequest" type="tns:articleFindByDistanceRequest"/>
+<xs:element name="articleFindByDistanceResponse" type="tns:articleFindByDistanceResponse"/>
 <xs:element name="articleFindByKeywordsRequest" type="tns:articleFindByKeywordsRequest"/>
 <xs:element name="articleFindByMagazineRequest" type="tns:articleFindByMagazineRequest"/>
 <xs:element name="articleFindByMagazineResponse" type="tns:articleFindByMagazineResponse"/>
@@ -40,20 +42,13 @@
 <xs:element name="articleMoreLikeThisResponse" type="tns:articleMoreLikeThisResponse"/>
 <xs:element name="articleSaveRequest" type="tns:articleSaveRequest"/>
 <xs:element name="articleSaveResponse" type="tns:articleSaveResponse"/>
-<xs:complexType name="articleBooleanQueryRequest">
+<xs:complexType name="articleFindByAbstractFieldRequest">
 <xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="queries" type="tns:queryModel"/>
-<xs:element minOccurs="0" name="operation" type="xs:string"/>
+<xs:element minOccurs="0" name="abstract" type="xs:string"/>
 <xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
 </xs:sequence>
 </xs:complexType>
-<xs:complexType name="queryModel">
-<xs:sequence>
-<xs:element minOccurs="0" name="field" type="xs:string"/>
-<xs:element minOccurs="0" name="value" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleBooleanQueryResponse">
+<xs:complexType name="articleFindByAbstractResponse">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
 </xs:sequence>
@@ -80,18 +75,8 @@
 <xs:element minOccurs="0" name="firstName" type="xs:string"/>
 <xs:element minOccurs="0" name="id" type="xs:string"/>
 <xs:element minOccurs="0" name="lastName" type="xs:string"/>
-<xs:element minOccurs="0" name="location" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByAbstractFieldRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="abstract" type="xs:string"/>
-<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByAbstractResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+<xs:element name="lat" type="xs:double"/>
+<xs:element name="lon" type="xs:double"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindAllRequest">
@@ -121,36 +106,6 @@
 <xs:complexType name="articleFindByMagazineResponse">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByScientificFieldRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="scientificField" type="xs:string"/>
-<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByScientificFieldResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleMoreLikeThisRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="text" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleMoreLikeThisResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:User"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="User">
-<xs:sequence>
-<xs:element name="id" type="xs:string"/>
-<xs:element name="firstName" type="xs:string"/>
-<xs:element name="lastName" type="xs:string"/>
-<xs:element name="email" type="xs:string"/>
-<xs:element name="age" type="xs:int"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByTitleRequest">
@@ -207,9 +162,67 @@
 </xs:element>
 </xs:sequence>
 </xs:complexType>
+<xs:complexType name="User">
+<xs:sequence>
+<xs:element name="id" type="xs:string"/>
+<xs:element name="firstName" type="xs:string"/>
+<xs:element name="lastName" type="xs:string"/>
+<xs:element name="email" type="xs:string"/>
+<xs:element name="age" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
 <xs:complexType name="articleSaveResponse">
 <xs:sequence>
 <xs:element minOccurs="0" name="article" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleBooleanQueryRequest">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="queries" type="tns:queryModel"/>
+<xs:element minOccurs="0" name="operation" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="queryModel">
+<xs:sequence>
+<xs:element minOccurs="0" name="field" type="xs:string"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleBooleanQueryResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByDistanceRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="article" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByDistanceResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" type="tns:reviewer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByScientificFieldRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="scientificField" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByScientificFieldResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleMoreLikeThisRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="text" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleMoreLikeThisResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:User"/>
 </xs:sequence>
 </xs:complexType>
 <xs:simpleType name="searchType">
@@ -266,12 +279,16 @@
     <wsdl:part name="parameters" element="tns:articleSaveRequest">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="booleanQuery">
-    <wsdl:part name="parameters" element="tns:articleBooleanQueryRequest">
+  <wsdl:message name="findByDistanceResponse">
+    <wsdl:part name="parameters" element="tns:articleFindByDistanceResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="findByTitleResponse">
     <wsdl:part name="parameters" element="tns:articleFindByTitleResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="booleanQuery">
+    <wsdl:part name="parameters" element="tns:articleBooleanQueryRequest">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="findByMagazineNameResponse">
@@ -280,6 +297,10 @@
   </wsdl:message>
   <wsdl:message name="findByKeywordsResponse">
     <wsdl:part name="parameters" element="tns:articleKeywordsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findByDistance">
+    <wsdl:part name="parameters" element="tns:articleFindByDistanceRequest">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="saveResponse">
@@ -298,12 +319,12 @@
     <wsdl:part name="parameters" element="tns:articleMoreLikeThisRequest">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="booleanQueryResponse">
-    <wsdl:part name="parameters" element="tns:articleBooleanQueryResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="findAllResponse">
     <wsdl:part name="parameters" element="tns:articleFindAllResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="booleanQueryResponse">
+    <wsdl:part name="parameters" element="tns:articleBooleanQueryResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="findByAbstractResponse">
@@ -311,12 +332,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="ArticleWebService">
-    <wsdl:operation name="booleanQuery">
-      <wsdl:input name="booleanQuery" message="tns:booleanQuery">
-    </wsdl:input>
-      <wsdl:output name="booleanQueryResponse" message="tns:booleanQueryResponse">
-    </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="findByAbstract">
       <wsdl:input name="findByAbstract" message="tns:findByAbstract">
     </wsdl:input>
@@ -339,18 +354,6 @@
       <wsdl:input name="findByMagazineName" message="tns:findByMagazineName">
     </wsdl:input>
       <wsdl:output name="findByMagazineNameResponse" message="tns:findByMagazineNameResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="findByScientificField">
-      <wsdl:input name="findByScientificField" message="tns:findByScientificField">
-    </wsdl:input>
-      <wsdl:output name="findByScientificFieldResponse" message="tns:findByScientificFieldResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="moreLikeThis">
-      <wsdl:input name="moreLikeThis" message="tns:moreLikeThis">
-    </wsdl:input>
-      <wsdl:output name="moreLikeThisResponse" message="tns:moreLikeThisResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="findByTitle">
@@ -377,18 +380,33 @@
       <wsdl:output name="saveResponse" message="tns:saveResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="booleanQuery">
+      <wsdl:input name="booleanQuery" message="tns:booleanQuery">
+    </wsdl:input>
+      <wsdl:output name="booleanQueryResponse" message="tns:booleanQueryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByDistance">
+      <wsdl:input name="findByDistance" message="tns:findByDistance">
+    </wsdl:input>
+      <wsdl:output name="findByDistanceResponse" message="tns:findByDistanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByScientificField">
+      <wsdl:input name="findByScientificField" message="tns:findByScientificField">
+    </wsdl:input>
+      <wsdl:output name="findByScientificFieldResponse" message="tns:findByScientificFieldResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="moreLikeThis">
+      <wsdl:input name="moreLikeThis" message="tns:moreLikeThis">
+    </wsdl:input>
+      <wsdl:output name="moreLikeThisResponse" message="tns:moreLikeThisResponse">
+    </wsdl:output>
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ArticleWebServiceServiceSoapBinding" type="tns:ArticleWebService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="booleanQuery">
-      <soap:operation soapAction="http://webService.demo.example.com/booleanQuery" style="document"/>
-      <wsdl:input name="booleanQuery">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="booleanQueryResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="findByAbstract">
       <soap:operation soapAction="http://webService.demo.example.com/findByAbstract" style="document"/>
       <wsdl:input name="findByAbstract">
@@ -425,24 +443,6 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="findByScientificField">
-      <soap:operation soapAction="http://webService.demo.example.com/findByScientificField" style="document"/>
-      <wsdl:input name="findByScientificField">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="findByScientificFieldResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="moreLikeThis">
-      <soap:operation soapAction="http://webService.demo.example.com/moreLikeThis" style="document"/>
-      <wsdl:input name="moreLikeThis">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="moreLikeThisResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="findByTitle">
       <soap:operation soapAction="http://webService.demo.example.com/findByTitle" style="document"/>
       <wsdl:input name="findByTitle">
@@ -476,6 +476,42 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="saveResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="booleanQuery">
+      <soap:operation soapAction="http://webService.demo.example.com/booleanQuery" style="document"/>
+      <wsdl:input name="booleanQuery">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="booleanQueryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByDistance">
+      <soap:operation soapAction="http://webService.demo.example.com/findByDistance" style="document"/>
+      <wsdl:input name="findByDistance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByDistanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findByScientificField">
+      <soap:operation soapAction="http://webService.demo.example.com/findByScientificField" style="document"/>
+      <wsdl:input name="findByScientificField">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findByScientificFieldResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="moreLikeThis">
+      <soap:operation soapAction="http://webService.demo.example.com/moreLikeThis" style="document"/>
+      <wsdl:input name="moreLikeThis">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="moreLikeThisResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

@@ -28,19 +28,26 @@ public class Reviewer {
 
 	@Field(type = FieldType.Integer)
 	private int age;
+
+	@Field(type = FieldType.Text)
+	private double lat;
 	
+
+	@Field(type = FieldType.Text)
+	private double lon;
 	
 	public Reviewer() {
 		super();
 	}
-	public Reviewer(String id, String firstName, String lastName,  int age,String email) {
+	
+	public Reviewer(String firstName, String lastName, String email, int age, double lat, double lon) {
 		super();
-		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.age = age;
+		this.lat = lat;
+		this.lon = lon;
 	}
-	@GeoPointField
-	private String location;
+
 }

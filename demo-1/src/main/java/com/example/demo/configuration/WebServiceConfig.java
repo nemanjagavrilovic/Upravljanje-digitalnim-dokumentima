@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.example.demo.converter.ArticlesToArticleEL;
 import com.example.demo.converter.ReviewerToUserConverter;
 import com.example.demo.repository.ArticlesRepository;
+import com.example.demo.repository.ReviewersRepository;
 import com.example.demo.service.SearchQueryService;
 import com.example.demo.webService.ArticleWebServiceImpl;
 
@@ -31,10 +32,13 @@ public class WebServiceConfig {
 	
 	@Autowired
 	private ReviewerToUserConverter reviewerToUserConverter;
+	
+	@Autowired
+	private ReviewersRepository reviewerRepository;
 	@Bean
 	public Endpoint articleService(){
 		EndpointImpl endpoint=new EndpointImpl(bus,new ArticleWebServiceImpl(searchQueryService,articlesRepository,
-				articlesConverter,reviewerToUserConverter));
+				articlesConverter,reviewerToUserConverter,reviewerRepository));
 		endpoint.publish("/ArticleWebService");
 		return endpoint;
 	}
