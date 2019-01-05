@@ -8,9 +8,9 @@ import com.example.demo.model.ArticleEL;
 
 public interface ArticleService {
 
-	ArticleEL save(ArticleEL article);
+/*	ArticleEL save(ArticleEL article);
 	Iterable<ArticleEL> search(QueryBuilder query);
 	Iterable<ArticleEL> findAll();
 	Iterable<ArticleEL> saveAll(List<ArticleEL> articles);
 	void delete(String id);
-}
+*/}

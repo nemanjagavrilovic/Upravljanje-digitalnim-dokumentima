@@ -24,6 +24,8 @@ public class ArticleEL {
 	@Field(type = FieldType.Text)
 	private String title;
 	
+	@Field(type = FieldType.Text)
+	private String filename;
 
 	@Field(type = FieldType.Text)
 	private String text;

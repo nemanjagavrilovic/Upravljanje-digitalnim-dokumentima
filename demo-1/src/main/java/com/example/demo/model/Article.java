@@ -28,7 +28,8 @@ import lombok.NoArgsConstructor;
     "keywords",
     "abstracts",
     "reviewers",
-    "scientificField"
+    "scientificField",
+    "file"
 })
 @XmlRootElement(name = "Article")
 @Data
@@ -66,4 +67,8 @@ public class Article {
 	
 	@XmlElement(required = true)
 	protected String scientificField;
+	
+	@XmlElement(required = true)
+	protected String file;
+
 }

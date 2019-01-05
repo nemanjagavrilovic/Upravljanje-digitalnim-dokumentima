@@ -13,7 +13,7 @@ import com.example.demo.service.ArticleService;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-	@Autowired
+	/*@Autowired
 	private ArticlesRepository articleRepository;
 	
 	@Override
@@ -46,4 +46,4 @@ public class ArticleServiceImpl implements ArticleService {
 		// TODO Auto-generated method stub
 		return articleRepository.saveAll(articles);
 	}
-}
+*/}

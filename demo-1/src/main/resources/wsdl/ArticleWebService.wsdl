@@ -14,11 +14,12 @@
 <xs:element name="abstracts" type="xs:string"/>
 <xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
 <xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
 </xs:sequence>
 </xs:complexType>
 </xs:element>
 <xs:element name="articleBooleanQueryRequest" type="tns:articleBooleanQueryRequest"/>
-<xs:element name="articleBooleanQuerydResponse" type="tns:articleBooleanQuerydResponse"/>
+<xs:element name="articleBooleanQueryResponse" type="tns:articleBooleanQueryResponse"/>
 <xs:element name="articleFindAllRequest" type="tns:articleFindAllRequest"/>
 <xs:element name="articleFindAllResponse" type="tns:articleFindAllResponse"/>
 <xs:element name="articleFindByAbstractFieldRequest" type="tns:articleFindByAbstractFieldRequest"/>
@@ -50,7 +51,7 @@
 <xs:element minOccurs="0" name="value" type="xs:string"/>
 </xs:sequence>
 </xs:complexType>
-<xs:complexType name="articleBooleanQuerydResponse">
+<xs:complexType name="articleBooleanQueryResponse">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
 </xs:sequence>
@@ -60,6 +61,7 @@
 <xs:element minOccurs="0" name="abstracts" type="xs:string"/>
 <xs:element minOccurs="0" name="article_id" type="xs:string"/>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="authors" nillable="true" type="tns:reviewer"/>
+<xs:element minOccurs="0" name="filename" type="xs:string"/>
 <xs:element minOccurs="0" name="highlight" type="xs:anyType"/>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
 <xs:element minOccurs="0" name="magazineName" type="xs:string"/>
@@ -186,6 +188,7 @@
 <xs:element name="abstracts" type="xs:string"/>
 <xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
 <xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
 </xs:sequence>
 </xs:complexType>
 </xs:element>
@@ -275,7 +278,7 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="booleanQueryResponse">
-    <wsdl:part name="parameters" element="tns:articleBooleanQuerydResponse">
+    <wsdl:part name="parameters" element="tns:articleBooleanQueryResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="findAllResponse">
