@@ -229,4 +229,16 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	        }
 	 
 	    }
+	public java.util.List<com.example.demo.model.ArticleEL> findByText(java.lang.String text,SearchType type) {
+		try {
+			List<ArticleEL> articles = searchQueryService.search(type, "text", text);
+			if (articles != null)
+				return articles;
+			else
+				return null;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+	}
 }

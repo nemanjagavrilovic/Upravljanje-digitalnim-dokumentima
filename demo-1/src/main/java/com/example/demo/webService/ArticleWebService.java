@@ -129,5 +129,15 @@ public interface ArticleWebService {
 	public List<ArticleEL> findByNameAndSurname(@WebParam (name="name") String name,
 										  @WebParam (name="surname") String surname,
 		   								  @WebParam (name="searchType") SearchType searchType);
+	@WebResult(name="articles")
+	@RequestWrapper(localName="articleFindByTextRequest",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.request.articleFindByTextRequest")
+	@WebMethod(operationName="findByText",action="http://webService.demo.example.com/findByText")
+	@ResponseWrapper(localName="articleFindByTextResponse",
+	targetNamespace="http://webService.demo.example.com/",
+	className="com.example.demo.response.articleFindByTextResponse")
+	public List<ArticleEL> findByText(@WebParam (name="text") String text,
+		   								  @WebParam (name="searchType") SearchType searchType);
 	
 }
