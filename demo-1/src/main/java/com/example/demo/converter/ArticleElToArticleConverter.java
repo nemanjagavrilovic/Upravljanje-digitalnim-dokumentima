@@ -30,7 +30,7 @@ public class ArticleElToArticleConverter implements Converter<ArticleEL, Article
 		article.setTitle(arg0.getTitle());
 		article.setAuthors(reviewerToUserConverter.convertList(arg0.getAuthors()));
 		article.setReviewers(reviewerToUserConverter.convertList(arg0.getReviewers()));
-		
+		article.setHighlight(arg0.getHighlight());
 		return article;
 	}
 

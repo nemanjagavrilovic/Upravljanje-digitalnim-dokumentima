@@ -29,7 +29,8 @@ import lombok.NoArgsConstructor;
     "abstracts",
     "reviewers",
     "scientificField",
-    "file"
+    "file",
+    "highlight"
 })
 @XmlRootElement(name = "Article")
 public class Article {
@@ -56,6 +57,14 @@ public class Article {
 	@XmlElement(required = true)
 	protected String magazineName;
 
+	public Object getHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(Object highlight) {
+		this.highlight = highlight;
+	}
+
 	@XmlElement(required = true)
 	protected List<User> authors;
 
@@ -68,6 +77,9 @@ public class Article {
 	@XmlElement(required = true)
 	protected String file;
 
+	@XmlElement
+	protected Object highlight;
+	
 	public String getFilename() {
 		return filename;
 	}

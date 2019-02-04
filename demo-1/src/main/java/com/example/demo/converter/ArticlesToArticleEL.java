@@ -49,6 +49,7 @@ public class ArticlesToArticleEL implements Converter<Article,ArticleEL>{
 				article.setMagazineName(arg0.getMagazineName());
 				article.setReviewers(userToReviewerConverter.convertList(arg0.getReviewers()));
 				article.setTitle(arg0.getTitle());
+				article.setFilename(arg0.getFilename());
 				return article;
 			}
 
@@ -75,9 +76,9 @@ public class ArticlesToArticleEL implements Converter<Article,ArticleEL>{
 		DataOutputStream os;
 		try {
 			byte[] bytes = Base64.getDecoder().decode(file);
-			Path path = Paths.get("D:\\Fakultet\\6 semestar\\Web\\WEB-work\\maven.1545762530237\\demo-1\\src\\main\\resources\\files" + File.separator +filename);
+			Path path = Paths.get("D:\\Fakultet\\6 semestar\\Web\\WEB-work\\maven.1545762530237\\demo-1\\src\\main\\webapp\\files" + File.separator +filename);
 	          
-			os = new DataOutputStream(new FileOutputStream("D:\\Fakultet\\6 semestar\\Web\\WEB-work\\maven.1545762530237\\demo-1\\src\\main\\resources\\files"+File.separator+filename));
+			os = new DataOutputStream(new FileOutputStream("D:\\Fakultet\\6 semestar\\Web\\WEB-work\\maven.1545762530237\\demo-1\\src\\main\\webapp\\files"+File.separator+filename));
 			os.write(bytes);
 			os.close();
 			retVal = path.toString();

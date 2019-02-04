@@ -35,7 +35,7 @@ public class SearchQueryService {
 		org.elasticsearch.index.query.QueryBuilder query = QueryBuilder.buildQuery(type,field,value);
     	SearchQuery searchQuery = new NativeSearchQueryBuilder()
     	            .withQuery(query)
-    	            .withHighlightFields(new HighlightBuilder.Field(field))
+    	            .withHighlightFields(new HighlightBuilder.Field(field).fragmentSize(50))
     	            .build();
     
     	Page<ArticleEL> pages  = null;
@@ -56,6 +56,7 @@ public class SearchQueryService {
                     article.setAuthors(mapUsers(searchHit.getSource().get("authors")));
                     article.setReviewers(mapUsers(searchHit.getSource().get("reviewers")));
                     article.setText((String) searchHit.getSource().get("text"));
+                    article.setFilename((String)searchHit.getSource().get("filename"));
                     article.setHighlight(searchHit.getHighlightFields().get(field).fragments()[0].toString());
             
                     chunk.add(article);
