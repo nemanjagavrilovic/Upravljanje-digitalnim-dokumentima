@@ -23,11 +23,11 @@ public class QueryBuilder {
 
 		org.elasticsearch.index.query.QueryBuilder retVal = null;
 		if (queryType.equals(SearchType.regular)) {
-			retVal = QueryBuilders.matchQuery(field, value);
+			retVal = QueryBuilders.matchQuery(field, value).analyzer("serbian-analyzer");
 		} else if (queryType.equals(SearchType.bool)) {
 			retVal = QueryBuilders.boolQuery();
 		}  else {
-			retVal = QueryBuilders.matchPhraseQuery(field, value);
+			retVal = QueryBuilders.matchPhraseQuery(field, value).analyzer("serbian-analyzer");
 		}
 
 		return retVal;

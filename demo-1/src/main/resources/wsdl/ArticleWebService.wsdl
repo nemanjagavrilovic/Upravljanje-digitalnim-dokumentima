@@ -50,101 +50,7 @@
 </xs:complexType>
 <xs:complexType name="articleFindByAbstractResponse">
 <xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleEL">
-<xs:sequence>
-<xs:element minOccurs="0" name="abstracts" type="xs:string"/>
-<xs:element minOccurs="0" name="article_id" type="xs:string"/>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="authors" nillable="true" type="tns:reviewer"/>
-<xs:element minOccurs="0" name="filename" type="xs:string"/>
-<xs:element minOccurs="0" name="highlight" type="xs:anyType"/>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
-<xs:element minOccurs="0" name="magazineName" type="xs:string"/>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" nillable="true" type="tns:reviewer"/>
-<xs:element minOccurs="0" name="scientificField" type="xs:string"/>
-<xs:element minOccurs="0" name="text" type="xs:string"/>
-<xs:element minOccurs="0" name="title" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="reviewer">
-<xs:sequence>
-<xs:element name="age" type="xs:int"/>
-<xs:element minOccurs="0" name="email" type="xs:string"/>
-<xs:element minOccurs="0" name="firstName" type="xs:string"/>
-<xs:element minOccurs="0" name="id" type="xs:string"/>
-<xs:element minOccurs="0" name="lastName" type="xs:string"/>
-<xs:element name="lat" type="xs:double"/>
-<xs:element name="lon" type="xs:double"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindAllRequest">
-<xs:sequence/>
-</xs:complexType>
-<xs:complexType name="articleFindAllResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByKeywordsRequest">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" type="xs:string"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleKeywordsResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByMagazineRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="magazineName" type="xs:string"/>
-<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByMagazineResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByTitleRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="title" type="xs:string"/>
-<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByTitleResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByAuthorsNameAndSurnameRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="name" type="xs:string"/>
-<xs:element minOccurs="0" name="surname" type="xs:string"/>
-<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByAuthorsNameAndSurnameResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByTextRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="text" type="xs:string"/>
-<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleFindByTextResponse">
-<xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
-</xs:sequence>
-</xs:complexType>
-<xs:complexType name="articleSaveRequest">
-<xs:sequence>
-<xs:element minOccurs="0" name="article">
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
 <xs:complexType>
 <xs:sequence>
 <xs:element name="filename" type="xs:ID"/>
@@ -169,11 +75,201 @@
 <xs:element name="lastName" type="xs:string"/>
 <xs:element name="email" type="xs:string"/>
 <xs:element name="age" type="xs:int"/>
+<xs:element name="lat" type="xs:double"/>
+<xs:element name="lon" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindAllRequest">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="articleFindAllResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByKeywordsRequest">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleKeywordsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByMagazineRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="magazineName" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByMagazineResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByTitleRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByTitleResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByAuthorsNameAndSurnameRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="surname" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByAuthorsNameAndSurnameResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByTextRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="text" type="xs:string"/>
+<xs:element minOccurs="0" name="searchType" type="tns:searchType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleFindByTextResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="articleSaveRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="article">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleSaveResponse">
 <xs:sequence>
-<xs:element minOccurs="0" name="article" type="tns:articleEL"/>
+<xs:element minOccurs="0" name="article">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleBooleanQueryRequest">
@@ -191,17 +287,47 @@
 </xs:complexType>
 <xs:complexType name="articleBooleanQueryResponse">
 <xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByDistanceRequest">
 <xs:sequence>
-<xs:element minOccurs="0" name="article" type="tns:articleEL"/>
+<xs:element minOccurs="0" name="article">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByDistanceResponse">
 <xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" type="tns:reviewer"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewers" type="tns:User"/>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleFindByScientificFieldRequest">
@@ -212,7 +338,22 @@
 </xs:complexType>
 <xs:complexType name="articleFindByScientificFieldResponse">
 <xs:sequence>
-<xs:element maxOccurs="unbounded" minOccurs="0" name="articles" type="tns:articleEL"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="articles">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="filename" type="xs:ID"/>
+<xs:element name="title" type="xs:string"/>
+<xs:element name="content" type="xs:string"/>
+<xs:element name="magazineName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="authors" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+<xs:element name="abstracts" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="reviewers" type="tns:User"/>
+<xs:element name="scientificField" type="xs:string"/>
+<xs:element name="file" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="articleMoreLikeThisRequest">

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.jws.WebService;
 
 import org.apache.lucene.search.join.ScoreMode;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
@@ -19,15 +20,16 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
+import com.example.demo.converter.ArticleElToArticleConverter;
 import com.example.demo.converter.ArticlesToArticleEL;
 import com.example.demo.converter.ReviewerToUserConverter;
 import com.example.demo.lucene.QueryBuilder;
 import com.example.demo.lucene.QueryModel;
 import com.example.demo.lucene.SearchType;
+import com.example.demo.model.Article;
 import com.example.demo.model.ArticleEL;
 import com.example.demo.model.Reviewer;
 import com.example.demo.repository.ArticlesRepository;
-import com.example.demo.repository.ReviewersRepository;
 import com.example.demo.service.SearchQueryService;
 
 /**
@@ -42,32 +44,32 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	private ReviewerToUserConverter reviewerToUserConverter;
 	private ArticlesRepository articlesRepository;
 	private SearchQueryService searchQueryService;
-	private ReviewersRepository reviewerRepository;
-
+	private ArticleElToArticleConverter articleElToArticleConverter;
+	private Client client;
 	@Autowired
 	public ArticleWebServiceImpl(SearchQueryService searchQueryService, ArticlesRepository articlesRepository,
-			ArticlesToArticleEL articleToArticleEl,ReviewerToUserConverter reviewerToUserConverter,
-			ReviewersRepository reviewerRepository) {
+			ArticlesToArticleEL articleToArticleEl, ReviewerToUserConverter reviewerToUserConverter,
+			ArticleElToArticleConverter articleElToArticleConverter) {
 		this.articlesRepository = articlesRepository;
 		this.articleToArticleEl = articleToArticleEl;
 		this.searchQueryService = searchQueryService;
 		this.reviewerToUserConverter = reviewerToUserConverter;
-		this.reviewerRepository = reviewerRepository;
+		this.articleElToArticleConverter = articleElToArticleConverter;
 	}
 
-	public java.util.List<com.example.demo.model.ArticleEL> findAll() {
+	public java.util.List<com.example.demo.model.Article> findAll() {
 		List<ArticleEL> list = new ArrayList<>();
 		try {
 			Iterable<ArticleEL> collection = articlesRepository.findAll();
 			collection.forEach(list::add);
-			return list;
+			return articleElToArticleConverter.convertList(list);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
 
-	public java.util.List<com.example.demo.model.ArticleEL> findByKeywords(java.util.List<java.lang.String> arg0) {
+	public java.util.List<com.example.demo.model.Article> findByKeywords(java.util.List<java.lang.String> arg0) {
 		List<ArticleEL> list = new ArrayList<>();
 		try {
 			for (String item : arg0) {
@@ -76,23 +78,24 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 				List<ArticleEL> found = new ArrayList<>();
 				collection.forEach(found::add);
 				for (ArticleEL article : found) {
-					if (!contains(list, article.getArticle_id())) {
+					if (!containsById(list, article.getArticle_id())) {
 						list.add(article);
 					}
 				}
 			}
-			return list;
+			return articleElToArticleConverter.convertList(list);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
 
-	public java.util.List<com.example.demo.model.ArticleEL> findByMagazineName(java.lang.String name,SearchType type) {
+	public java.util.List<com.example.demo.model.Article> findByMagazineName(java.lang.String name, SearchType type) {
 		try {
 			List<ArticleEL> articles = searchQueryService.search(type, "magazineName", name);
-			if(articles != null)
-				return articles;
+			if (articles != null)
+				return articleElToArticleConverter.convertList(articles);
+
 			else
 				return null;
 		} catch (Exception ex) {
@@ -131,11 +134,11 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 		}
 	}
 
-	public java.util.List<com.example.demo.model.ArticleEL> findByTitle(java.lang.String title,SearchType type) {
+	public java.util.List<com.example.demo.model.Article> findByTitle(java.lang.String title, SearchType type) {
 		try {
 			List<ArticleEL> articles = searchQueryService.search(type, "title", title);
 			if (articles != null)
-				return articles;
+				return articleElToArticleConverter.convertList(articles);
 			else
 				return null;
 		} catch (Exception ex) {
@@ -145,25 +148,22 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	}
 
 	@Override
-	public ArticleEL save(com.example.demo.model.Article arg0) {
+	public Article save(com.example.demo.model.Article arg0) {
 		try {
 			ArticleEL ar = articleToArticleEl.convert(arg0);
-			return articlesRepository.index(ar);
+			return articleElToArticleConverter.convert(articlesRepository.index(ar));
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
 
-	public boolean contains(final List<ArticleEL> list, final String id) {
-		return list.stream().filter(o -> o.getArticle_id().equals(id)).findFirst().isPresent();
-	}
-
-	public List<ArticleEL> findByScientificField(String scientificField,SearchType type) {
+	public List<Article> findByScientificField(String scientificField, SearchType type) {
 		try {
 			List<ArticleEL> articles = searchQueryService.search(type, "scientificField", scientificField);
-			if(articles != null)
-				return articles;
+			if (articles != null)
+				return articleElToArticleConverter.convertList(articles);
 			else
 				return null;
 		} catch (Exception ex) {
@@ -173,74 +173,82 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	}
 
 	@Override
-	public List<ArticleEL> booleanQuery(List<QueryModel> queryFields, String operation,SearchType searchType) {
+	public List<Article> booleanQuery(List<QueryModel> queryFields, String operation, SearchType searchType) {
 		List<ArticleEL> list = new ArrayList<>();
 		try {
 			List<org.elasticsearch.index.query.QueryBuilder> queries = new ArrayList<>();
-			for (QueryModel query : queryFields) {
-				queries.add(QueryBuilder.buildQuery(searchType, query.getField(), query.getValue()));
-			}
 			BoolQueryBuilder builder = QueryBuilders.boolQuery();
-			if (operation.equalsIgnoreCase("AND")) {
-				for (org.elasticsearch.index.query.QueryBuilder query : queries) {
-					builder.must(query);
-				}
-			} else if (operation.equalsIgnoreCase("OR")) {
-				for (org.elasticsearch.index.query.QueryBuilder query : queries) {
-					builder.should(query);
+			for (QueryModel query : queryFields) {
+				
+				org.elasticsearch.index.query.QueryBuilder createdQuery = QueryBuilder.buildQuery(convertSearchType(query.getSearchType()),
+							query.getField(), query.getValue());
+				
+				queries.add(createdQuery);
+				if (query.getOperation().equalsIgnoreCase("AND")) {
+					builder.must(createdQuery);
+				} else if (query.getOperation().equalsIgnoreCase("OR")) {
+					builder.should(createdQuery);
 				}
 			}
+
 			Iterable<ArticleEL> collection = articlesRepository.search(builder);
 			collection.forEach(list::add);
-			return list;
+			return articleElToArticleConverter.convertList(list);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
-	
-	public java.util.List<com.example.demo.model.ArticleEL> findByAbstract(java.lang.String abstracts,com.example.demo.lucene.SearchType type) {  
-	        try {
-	    		List<ArticleEL> articles = searchQueryService.search(type, "abstracts", abstracts);
-				if(articles != null)
-					return articles;
-				else
-					return null;
-		
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	            throw new RuntimeException(ex);
-	        }
-	 
-	    }
-	public java.util.List<com.example.demo.model.ArticleEL> findByNameAndSurname(java.lang.String name,java.lang.String surname,com.example.demo.lucene.SearchType arg2) {  
+
+	public java.util.List<com.example.demo.model.Article> findByAbstract(java.lang.String abstracts,
+			com.example.demo.lucene.SearchType type) {
+		try {
+			List<ArticleEL> articles = searchQueryService.search(type, "abstracts", abstracts);
+			if (articles != null)
+				return articleElToArticleConverter.convertList(articles);
+			else
+				return null;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+
+	}
+
+	public java.util.List<com.example.demo.model.Article> findByNameAndSurname(java.lang.String name,
+			java.lang.String surname, com.example.demo.lucene.SearchType arg2) {
 		List<ArticleEL> list = new ArrayList<>();
-		  
-		try { 
-	        	BoolQueryBuilder builder = QueryBuilders.boolQuery();
-	        	org.elasticsearch.index.query.QueryBuilder queryName = QueryBuilder.buildQuery(arg2, "authors.firstName", name);
-	        	org.elasticsearch.index.query.QueryBuilder querySurname = QueryBuilder.buildQuery(arg2, "authors.lastName", surname);
-	        	
-	        	builder.must(queryName);
-	        	builder.must(querySurname);
-	        	
-	        	org.elasticsearch.index.query.QueryBuilder nested = QueryBuilders.nestedQuery("authors", builder, ScoreMode.Avg);
-	        	
-	        	Iterable<ArticleEL> collection = articlesRepository.search(nested);
-				collection.forEach(list::add);
-				return list;
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	            throw new RuntimeException(ex);
-	        }
-	 
-	    }
-	public java.util.List<com.example.demo.model.ArticleEL> findByText(java.lang.String text,SearchType type) {
+
+		try {
+			BoolQueryBuilder builder = QueryBuilders.boolQuery();
+			org.elasticsearch.index.query.QueryBuilder queryName = QueryBuilder.buildQuery(arg2, "authors.firstName",
+					name);
+			org.elasticsearch.index.query.QueryBuilder querySurname = QueryBuilder.buildQuery(arg2, "authors.lastName",
+					surname);
+
+			builder.must(queryName);
+			builder.must(querySurname);
+
+			org.elasticsearch.index.query.QueryBuilder nested = QueryBuilders.nestedQuery("authors", builder,
+					ScoreMode.Avg);
+
+			Iterable<ArticleEL> collection = articlesRepository.search(nested);
+			collection.forEach(list::add);
+			return articleElToArticleConverter.convertList(list);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+
+	}
+
+	public java.util.List<com.example.demo.model.Article> findByText(java.lang.String text, SearchType type) {
 		try {
 			List<ArticleEL> articles = searchQueryService.search(type, "text", text);
 			if (articles != null)
-				return articles;
+				return articleElToArticleConverter.convertList(articles);
 			else
 				return null;
 		} catch (Exception ex) {
@@ -248,53 +256,84 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 			throw new RuntimeException(ex);
 		}
 	}
-	public java.util.List<com.example.demo.model.Reviewer> findByDistance(com.example.demo.model.ArticleEL arg0) {  
-	    try {
-	    	List<Reviewer> reviewers = new ArrayList<>();
+
+	public java.util.List<com.example.demo.model.User> findByDistance(com.example.demo.model.Article inputArticle) {
+		try {
+			ArticleEL arg0 = articleToArticleEl.convert(inputArticle);
+			List<Reviewer> reviewers = new ArrayList<>();
 			Iterable<ArticleEL> allArticles = articlesRepository.findAll();
 			List<Reviewer> allReviewers = new ArrayList<>();
-			for(ArticleEL ar : allArticles) {
+			for (ArticleEL ar : allArticles) {
 				allReviewers.addAll(ar.getReviewers());
 			}
 			List<GeoPoint> points = new ArrayList<>();
-			for(Reviewer reviewer : arg0.getAuthors()) {
-				points.add(new GeoPoint(reviewer.getLat(),reviewer.getLon()));
+			for (Reviewer reviewer : arg0.getAuthors()) {
+				points.add(reviewer.getLocation());
 			}
-			for(Reviewer r : allReviewers) {
+			for (Reviewer r : allReviewers) {
 				boolean isInArea = false;
 				for (GeoPoint point : points) {
-					GeoDistanceQueryBuilder query = QueryBuilders.geoDistanceQuery("location")
+					GeoDistanceQueryBuilder query = QueryBuilders.geoDistanceQuery("reviewers.location")
 							.point(point.getLat(), point.getLon()).distance(100, DistanceUnit.KILOMETERS);
-					Iterable<Reviewer> searchedReviewers = reviewerRepository.search(query);
-					if(checkReviewersDistance(searchedReviewers, r)) {
-						isInArea=true;
+					// koji su u 100 km
+					Iterable<ArticleEL> searchedArticles = articlesRepository.search(query);
+					List<Reviewer> searchedReviewers = new ArrayList<>();
+
+					for (ArticleEL article : searchedArticles) {
+						for (Reviewer reviewer : article.getReviewers()) {
+							if (!containsByReviewerId(searchedReviewers, reviewer.getId())) {
+								searchedReviewers.add(reviewer);
+							}
+						}
+					}
+					// searchedReviewers - svi koji se nalaze u 100km
+					if (checkReviewersDistance(searchedReviewers, r)) {
+						isInArea = true;
 						break;
 					}
 				}
-				if(isInArea == false)
+				if (isInArea == false)
 					reviewers.add(r);
-				}
-				return reviewers;
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	            throw new RuntimeException(ex);
-	        }
-	 
-	    }
+			}
+			return reviewerToUserConverter.convertList(reviewers);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+
+	}
+
 	public boolean checkReviewersDistance(Iterable<Reviewer> searchedReviewers, Reviewer reviewer) {
 		boolean isInArea = false;
 		for (Reviewer item : searchedReviewers) {
-			if (compareReviewers(item,reviewer)) {
+			if (compareReviewers(item, reviewer)) {
 				isInArea = true;
 				break;
 			}
 		}
 		return isInArea;
 	}
+
 	public boolean compareReviewers(Reviewer reviewer1, Reviewer reviewer2) {
 		if (reviewer1.getId().equals(reviewer2.getId())) {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean containsById(final List<ArticleEL> list, final String id) {
+		return list.stream().filter(o -> o.getArticle_id().equals(id)).findFirst().isPresent();
+	}
+
+	public boolean containsByReviewerId(final List<Reviewer> list, final String id) {
+		return list.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent();
+	}
+	public SearchType convertSearchType(String searchType) {
+		if(searchType.toLowerCase().equals(SearchType.regular.toString())){
+			return SearchType.regular;
+		} else if (searchType.toLowerCase().equals(SearchType.phrase.toString())) {
+			return SearchType.phrase;
+		}
+		return null;
 	}
 }

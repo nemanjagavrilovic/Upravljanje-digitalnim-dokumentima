@@ -21,19 +21,19 @@ import lombok.Setter;
 @Setter
 public class ArticleEL {
 	
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text , analyzer = "serbian-analyzer")
 	private String title;
 	
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String filename;
 
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String text;
 	
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String abstracts;
 	
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String scientificField;
 	
 	@Field(type = FieldType.Keyword)
@@ -42,7 +42,7 @@ public class ArticleEL {
 	@Id
 	private String article_id;
 	
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String magazineName;
 	
 	@Field(type = FieldType.Nested)

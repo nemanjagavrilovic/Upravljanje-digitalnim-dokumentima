@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.model.Reviewer;
@@ -19,8 +20,7 @@ public class UserToReviewerConverter implements Converter<User,Reviewer> {
 		reviewer.setFirstName(arg0.getFirstName());
 		reviewer.setLastName(arg0.getLastName());
 		reviewer.setId(arg0.getId());
-		reviewer.setLat(arg0.getLat());
-		reviewer.setLon(arg0.getLon());
+		reviewer.setLocation(new GeoPoint(arg0.getLat(),arg0.getLon()));
 		reviewer.setEmail(arg0.getEmail());
 		return reviewer;
 	}

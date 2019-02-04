@@ -14,6 +14,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
@@ -83,11 +84,12 @@ public class SearchQueryService {
 			List<Map<String,Object>> list = (ArrayList<Map<String,Object>>) object;
 			for(Map<String,Object> map : list){
 				System.out.println(map);
-				if(map.get("id") != null && map.get("firstName") != null && map.get("lastName") != null && map.get("age") != null && map.get("email") != null)
+				if(map.get("id") != null && map.get("firstName") != null && map.get("lastName") != null && map.get("age") != null && map.get("email") != null) {
+					Map<String,Object> location = (Map<String, Object>) map.get("location");
 					users.add(new Reviewer(map.get("id").toString(),map.get("firstName").toString(),map.get("lastName").toString(), map.get("email").toString(),
-							Integer.parseInt(map.get("age").toString()),Double.parseDouble(map.get("lat").toString()),Double.parseDouble(map.get("lon").toString())));
-				else 
-					users.add(new Reviewer(map.get("id").toString(),"","","",0,0,0));
+							Integer.parseInt(map.get("age").toString()),new GeoPoint(Double.parseDouble(location.get("lat").toString()),Double.parseDouble(location.get("lon").toString()))));
+				}else
+					users.add(new Reviewer(map.get("id").toString(),"","","",0,null));
 				
 			}
 		}

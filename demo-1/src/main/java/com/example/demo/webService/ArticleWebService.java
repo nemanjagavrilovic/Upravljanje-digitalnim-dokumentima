@@ -31,7 +31,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleSaveResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleSaveResponse")
-	public ArticleEL save(@WebParam (name="article") Article article);
+	public Article save(@WebParam (name="article") Article article);
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleFindAllRequest",
@@ -41,7 +41,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindAllResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindAllResponse")
-	public List<ArticleEL> findAll();
+	public List<Article> findAll();
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleMoreLikeThisRequest",
@@ -61,7 +61,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByMagazineResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByMagazineResponse")
-	public List<ArticleEL> findByMagazineName(@WebParam (name="magazineName") String magazineName,
+	public List<Article> findByMagazineName(@WebParam (name="magazineName") String magazineName,
 											  @WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
@@ -72,7 +72,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByTitleResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByTitleResponse")
-	public List<ArticleEL> findByTitle(@WebParam (name="title") String title,@WebParam (name="searchType") SearchType searchType);
+	public List<Article> findByTitle(@WebParam (name="title") String title,@WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleFindByKeywordsRequest",
@@ -82,7 +82,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleKeywordsResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleKeywordsResponse")
-	public List<ArticleEL> findByKeywords(@WebParam (name="keywords") List<String> keywords);
+	public List<Article> findByKeywords(@WebParam (name="keywords") List<String> keywords);
 	
 	@WebResult(name="articles")
 	@RequestWrapper(localName="articleFindByScientificFieldRequest",
@@ -92,7 +92,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByScientificFieldResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByScientificFieldResponse")
-	public List<ArticleEL> findByScientificField(@WebParam (name="scientificField") String scientificField,
+	public List<Article> findByScientificField(@WebParam (name="scientificField") String scientificField,
 												 @WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
@@ -103,7 +103,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleBooleanQueryResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleBooleanQueryResponse")
-	public List<ArticleEL> booleanQuery(@WebParam (name="queries") List<QueryModel> queryFields,
+	public List<Article> booleanQuery(@WebParam (name="queries") List<QueryModel> queryFields,
 										@WebParam (name="operation") String operation,
 										@WebParam (name="searchType") SearchType searchType);
 	
@@ -115,7 +115,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByAbstractResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByAbstractResponse")
-	public List<ArticleEL> findByAbstract(@WebParam (name="abstract") String abstracts,
+	public List<Article> findByAbstract(@WebParam (name="abstract") String abstracts,
 		   								  @WebParam (name="searchType") SearchType searchType);
 	
 	@WebResult(name="articles")
@@ -126,7 +126,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByAuthorsNameAndSurnameResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByAuthorsNameAndSurnameResponse")
-	public List<ArticleEL> findByNameAndSurname(@WebParam (name="name") String name,
+	public List<Article> findByNameAndSurname(@WebParam (name="name") String name,
 										  @WebParam (name="surname") String surname,
 		   								  @WebParam (name="searchType") SearchType searchType);
 	@WebResult(name="articles")
@@ -137,7 +137,7 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByTextResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByTextResponse")
-	public List<ArticleEL> findByText(@WebParam (name="text") String text,
+	public List<Article> findByText(@WebParam (name="text") String text,
 		   								  @WebParam (name="searchType") SearchType searchType);
 	@WebResult(name="reviewers")
 	@RequestWrapper(localName="articleFindByDistanceRequest",
@@ -147,6 +147,6 @@ public interface ArticleWebService {
 	@ResponseWrapper(localName="articleFindByDistanceResponse",
 	targetNamespace="http://webService.demo.example.com/",
 	className="com.example.demo.response.articleFindByDistanceResponse")
-	public List<Reviewer> findByDistance(@WebParam (name="article") ArticleEL article);
+	public List<User> findByDistance(@WebParam (name="article") Article article);
 	
 }

@@ -17,10 +17,10 @@ public class Reviewer {
 
 	@Id
 	private String id;
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String firstName;
 
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "serbian-analyzer")
 	private String lastName;
 
 	@Field(type = FieldType.Text)
@@ -29,25 +29,20 @@ public class Reviewer {
 	@Field(type = FieldType.Integer)
 	private int age;
 
-	@Field(type = FieldType.Text)
-	private double lat;
-	
-
-	@Field(type = FieldType.Text)
-	private double lon;
+	@GeoPointField
+	private GeoPoint location;
 	
 	public Reviewer() {
 		super();
 	}
 	
-	public Reviewer(String firstName, String lastName, String email, int age, double lat, double lon) {
+	public Reviewer(String firstName, String lastName, String email, int age, GeoPoint location) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.age = age;
-		this.lat = lat;
-		this.lon = lon;
+		this.location = location;
 	}
 
 }
