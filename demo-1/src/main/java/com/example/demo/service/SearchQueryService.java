@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.text.Text;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +31,13 @@ public class SearchQueryService {
 	
 	@Autowired
 	private ElasticsearchTemplate elasticsearchTemplate;
-	
-	public List<ArticleEL> search(SearchType type,String field, String value){
+
+	public List<ArticleEL> search(SearchType type,String field, String value,String operation){
 		try{
-		org.elasticsearch.index.query.QueryBuilder query = QueryBuilder.buildQuery(type,field,value);
+		org.elasticsearch.index.query.QueryBuilder query = QueryBuilder.buildQuery(type,field,value,operation);
     	SearchQuery searchQuery = new NativeSearchQueryBuilder()
     	            .withQuery(query)
-    	            .withHighlightFields(new HighlightBuilder.Field(field).fragmentSize(50))
+    	            .withHighlightFields(new HighlightBuilder.Field(field).fragmentSize(50).numOfFragments(4).preTags("<b><i>").postTags("</i></b>"))
     	            .build();
     
     	Page<ArticleEL> pages  = null;
@@ -57,8 +59,11 @@ public class SearchQueryService {
                     article.setReviewers(mapUsers(searchHit.getSource().get("reviewers")));
                     article.setText((String) searchHit.getSource().get("text"));
                     article.setFilename((String)searchHit.getSource().get("filename"));
-                    article.setHighlight(searchHit.getHighlightFields().get(field).fragments()[0].toString());
-            
+                    String highlight = "";
+                    for(Text text : searchHit.getHighlightFields().get(field).fragments()) {
+                    	highlight +=text.toString()+" ...";
+                    }
+                    article.setHighlight(highlight);
                     chunk.add(article);
                 }
                 if (chunk.size() > 0) {

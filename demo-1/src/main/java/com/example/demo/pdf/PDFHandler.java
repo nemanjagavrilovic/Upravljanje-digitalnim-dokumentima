@@ -2,6 +2,10 @@ package com.example.demo.pdf;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -29,8 +33,13 @@ public class PDFHandler  {
 			String title = ""+info.getTitle();
 			retVal.setTitle(title);
 
-//			String keywords = ""+info.getKeywords();
-	//		retVal.setKeywords(keywords);
+			String keywords = ""+info.getKeywords();
+			String[] p = keywords.split(",");
+			List<String> newKeywords = new ArrayList<String>();
+			for(String s : p) {
+				newKeywords.add(s.trim());
+			}
+			retVal.setKeywords(newKeywords);
 			
 			retVal.setFilename(file.getCanonicalPath());
 			

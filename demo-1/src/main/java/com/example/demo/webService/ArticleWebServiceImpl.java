@@ -16,6 +16,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
+import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
@@ -92,7 +93,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 
 	public java.util.List<com.example.demo.model.Article> findByMagazineName(java.lang.String name, SearchType type) {
 		try {
-			List<ArticleEL> articles = searchQueryService.search(type, "magazineName", name);
+			List<ArticleEL> articles = searchQueryService.search(type, "magazineName", name,"AND");
 			if (articles != null)
 				return articleElToArticleConverter.convertList(articles);
 
@@ -121,11 +122,15 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 			}
 
 			MoreLikeThisQueryBuilder query = QueryBuilders.moreLikeThisQuery(fields, textForSearch, items)
-					.minTermFreq(1).minDocFreq(1);
+					.minTermFreq(10);
 			Iterable<ArticleEL> articles = articlesRepository.search(query);
 			List<Reviewer> reviewers = new ArrayList<>();
 			for (ArticleEL article : articles) {
-				reviewers.addAll(article.getReviewers());
+				for(Reviewer reviewer : article.getReviewers()){
+					if(!containsByReviewerId(reviewers, reviewer.getId())) {
+						reviewers.add(reviewer);
+					}
+				}
 			}
 			return reviewerToUserConverter.convertList(reviewers);
 		} catch (Exception ex) {
@@ -136,7 +141,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 
 	public java.util.List<com.example.demo.model.Article> findByTitle(java.lang.String title, SearchType type) {
 		try {
-			List<ArticleEL> articles = searchQueryService.search(type, "title", title);
+			List<ArticleEL> articles = searchQueryService.search(type, "title", title,"AND");
 			if (articles != null)
 				return articleElToArticleConverter.convertList(articles);
 			else
@@ -161,7 +166,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 
 	public List<Article> findByScientificField(String scientificField, SearchType type) {
 		try {
-			List<ArticleEL> articles = searchQueryService.search(type, "scientificField", scientificField);
+			List<ArticleEL> articles = searchQueryService.search(type, "scientificField", scientificField,"AND");
 			if (articles != null)
 				return articleElToArticleConverter.convertList(articles);
 			else
@@ -181,7 +186,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 			for (QueryModel query : queryFields) {
 				
 				org.elasticsearch.index.query.QueryBuilder createdQuery = QueryBuilder.buildQuery(convertSearchType(query.getSearchType()),
-							query.getField(), query.getValue());
+							query.getField(), query.getValue(),query.getOperation());
 				
 				queries.add(createdQuery);
 				if (query.getOperation().equalsIgnoreCase("AND")) {
@@ -204,7 +209,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 	public java.util.List<com.example.demo.model.Article> findByAbstract(java.lang.String abstracts,
 			com.example.demo.lucene.SearchType type) {
 		try {
-			List<ArticleEL> articles = searchQueryService.search(type, "abstracts", abstracts);
+			List<ArticleEL> articles = searchQueryService.search(type, "abstracts", abstracts,"AND");
 			if (articles != null)
 				return articleElToArticleConverter.convertList(articles);
 			else
@@ -224,9 +229,9 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 		try {
 			BoolQueryBuilder builder = QueryBuilders.boolQuery();
 			org.elasticsearch.index.query.QueryBuilder queryName = QueryBuilder.buildQuery(arg2, "authors.firstName",
-					name);
+					name,"AND");
 			org.elasticsearch.index.query.QueryBuilder querySurname = QueryBuilder.buildQuery(arg2, "authors.lastName",
-					surname);
+					surname,"AND");
 
 			builder.must(queryName);
 			builder.must(querySurname);
@@ -246,7 +251,7 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 
 	public java.util.List<com.example.demo.model.Article> findByText(java.lang.String text, SearchType type) {
 		try {
-			List<ArticleEL> articles = searchQueryService.search(type, "text", text);
+			List<ArticleEL> articles = searchQueryService.search(type, "text", text,"AND");
 			if (articles != null)
 				return articleElToArticleConverter.convertList(articles);
 			else
@@ -273,10 +278,12 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 			for (Reviewer r : allReviewers) {
 				boolean isInArea = false;
 				for (GeoPoint point : points) {
+				   
 					GeoDistanceQueryBuilder query = QueryBuilders.geoDistanceQuery("reviewers.location")
 							.point(point.getLat(), point.getLon()).distance(100, DistanceUnit.KILOMETERS);
 					// koji su u 100 km
-					Iterable<ArticleEL> searchedArticles = articlesRepository.search(query);
+				NestedQueryBuilder builder = QueryBuilders.nestedQuery("reviewers", query, ScoreMode.Avg);
+			   	Iterable<ArticleEL> searchedArticles = articlesRepository.search(builder);
 					List<Reviewer> searchedReviewers = new ArrayList<>();
 
 					for (ArticleEL article : searchedArticles) {
@@ -293,7 +300,10 @@ public class ArticleWebServiceImpl implements ArticleWebService {
 					}
 				}
 				if (isInArea == false)
-					reviewers.add(r);
+					if(!containsByReviewerId(reviewers,r.getId())){
+
+						reviewers.add(r);
+					}
 			}
 			return reviewerToUserConverter.convertList(reviewers);
 		} catch (Exception ex) {

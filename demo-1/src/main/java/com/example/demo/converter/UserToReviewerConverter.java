@@ -22,6 +22,7 @@ public class UserToReviewerConverter implements Converter<User,Reviewer> {
 		reviewer.setId(arg0.getId());
 		reviewer.setLocation(new GeoPoint(arg0.getLat(),arg0.getLon()));
 		reviewer.setEmail(arg0.getEmail());
+		reviewer.setAge(arg0.getAge());
 		return reviewer;
 	}
 

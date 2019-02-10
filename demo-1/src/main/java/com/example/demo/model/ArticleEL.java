@@ -51,8 +51,8 @@ public class ArticleEL {
 	@Field(type = FieldType.Nested)
 	private List<Reviewer> reviewers;
 	
-	@Field(type = FieldType.Nested)
-	private Object highlight;
+	@Field(type = FieldType.Text)
+	private String highlight;
 
 	
 }

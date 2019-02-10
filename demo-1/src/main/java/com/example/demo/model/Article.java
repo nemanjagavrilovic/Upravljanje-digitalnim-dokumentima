@@ -57,11 +57,11 @@ public class Article {
 	@XmlElement(required = true)
 	protected String magazineName;
 
-	public Object getHighlight() {
+	public String getHighlight() {
 		return highlight;
 	}
 
-	public void setHighlight(Object highlight) {
+	public void setHighlight(String highlight) {
 		this.highlight = highlight;
 	}
 
@@ -78,7 +78,7 @@ public class Article {
 	protected String file;
 
 	@XmlElement
-	protected Object highlight;
+	protected String highlight;
 	
 	public String getFilename() {
 		return filename;

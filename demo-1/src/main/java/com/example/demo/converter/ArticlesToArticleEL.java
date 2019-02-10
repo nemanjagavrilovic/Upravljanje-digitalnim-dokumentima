@@ -39,17 +39,27 @@ public class ArticlesToArticleEL implements Converter<Article,ArticleEL>{
 	@Override
 	public ArticleEL convert(Article arg0) {
 		// TODO Auto-generated method stub
+		ArticleEL article = new ArticleEL();
 		try {
-			String fileName = saveUploadedFile(arg0.getFile(),arg0.getFilename());
-			if(fileName != null) {
-				ArticleEL article = pdfHandler.getIndexUnit(new File(fileName));
+			if(arg0.getFile() != null && arg0.getFilename() != null){
+				String fileName = saveUploadedFile(arg0.getFile(),arg0.getFilename());
+				if(fileName != null) {
+					article = pdfHandler.getIndexUnit(new File(fileName));
+					article.setAbstracts(arg0.getAbstracts());
+					article.setAuthors(userToReviewerConverter.convertList(arg0.getAuthors()));
+					article.setMagazineName(arg0.getMagazineName());
+					article.setReviewers(userToReviewerConverter.convertList(arg0.getReviewers()));
+					article.setFilename(arg0.getFilename());
+					article.setScientificField(arg0.getScientificField());
+					return article;
+				}
+			} else {
 				article.setAbstracts(arg0.getAbstracts());
 				article.setAuthors(userToReviewerConverter.convertList(arg0.getAuthors()));
-				article.setKeywords(arg0.getKeywords());
 				article.setMagazineName(arg0.getMagazineName());
 				article.setReviewers(userToReviewerConverter.convertList(arg0.getReviewers()));
-				article.setTitle(arg0.getTitle());
 				article.setFilename(arg0.getFilename());
+				article.setScientificField(arg0.getScientificField());
 				return article;
 			}
 
